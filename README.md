@@ -24,20 +24,153 @@
 ```
 embodied_intelligence/
 ├── 00-math-foundation/           # 数学基础
+│   ├── 01-linear-algebra/       # 线性代数
+│   ├── 02-calculus/             # 微积分
+│   ├── 03-probability-statistics/ # 概率论与统计
+│   ├── 04-numerical-computation/  # 数值计算
+│   ├── 05-geometry/             # 几何基础
+│   ├── 06-optimization-theory/   # 优化理论
+│   ├── 07-information-theory/    # 信息论
+│   ├── 08-complex-analysis/      # 复分析与傅里叶分析
+│   ├── 09-applications/          # 应用领域
+│   └── 10-paper-surveys/        # 论文与综述
 ├── 01-physics/                   # 物理基础
+│   ├── 01-classical-mechanics/   # 经典力学基础
+│   ├── 02-kinematics/            # 运动学
+│   ├── 03-dynamics/              # 动力学
+│   ├── 04-control-theory/        # 控制理论基础
+│   ├── 05-physics-simulation/    # 物理仿真
+│   ├── 06-sensor-modeling/       # 传感器建模
+│   ├── 07-contact-mechanics/     # 碰撞检测与接触力学
+│   ├── 08-numerical-methods/     # 数值方法
+│   ├── 09-applications/           # 应用领域
+│   └── 10-paper-surveys/         # 论文与综述
 ├── 02-slam-3dreconstruction/     # SLAM与三维重建
+│   ├── 01-slam-fundamentals/     # SLAM基础理论
+│   ├── 02-visual-odometry/       # 视觉里程计（前端）
+│   ├── 03-slam-backend/         # SLAM后端优化
+│   ├── 04-multi-sensor-fusion/   # 多传感器融合
+│   ├── 05-loop-closure/          # 回环检测
+│   ├── 06-map-representation/    # 地图表示与管理
+│   ├── 07-traditional-3d-reconstruction/ # 传统三维重建
+│   ├── 08-neural-3d-reconstruction/ # 神经三维重建
+│   ├── 09-datasets-evaluation/   # 数据集与评估
+│   ├── 10-applications/          # 应用领域
+│   ├── 11-cutting-edge/          # 前沿研究与未来方向
+│   └── 12-paper-surveys/         # 论文详解
 ├── 03-machine-learning/          # 机器学习基础
+│   ├── 01-fundamentals/          # 机器学习基础
+│   ├── 02-supervised-learning/   # 监督学习
+│   ├── 03-unsupervised-learning/ # 无监督学习
+│   ├── 04-feature-engineering/   # 特征工程
+│   ├── 05-model-evaluation/     # 模型评估与选择
+│   ├── 06-dimensionality-reduction/ # 降维方法
+│   ├── 07-bayesian-methods/     # 贝叶斯方法
+│   ├── 08-ensemble-learning/     # 集成学习
+│   ├── 09-applications/          # 应用领域
+│   └── 10-paper-surveys/         # 论文详解
 ├── 04-deep-learning/             # 深度学习
-├── 05-reinforcement-learning/    # 强化学习
+│   ├── 01-neural-network-basics/ # 神经网络基础
+│   ├── 02-cnn/                  # 卷积神经网络
+│   ├── 03-rnn/                  # 循环神经网络
+│   ├── 04-transformer/          # Transformer架构
+│   ├── 05-generative-models/     # 生成模型
+│   ├── 06-self-supervised-learning/ # 自监督学习
+│   ├── 07-multimodal-learning/  # 多模态学习
+│   ├── 08-model-training/        # 模型训练与优化
+│   ├── 09-applications/          # 应用领域
+│   └── 10-paper-surveys/         # 论文详解
+├── 05-reinforcement-learning/   # 强化学习
+│   ├── 01-fundamentals/         # RL基础
+│   ├── 02-classical-algorithms/ # 经典算法
+│   ├── 03-deep-rl/              # 深度强化学习
+│   ├── 04-offline-rl/           # 离线强化学习
+│   ├── 05-hierarchical-rl/       # 分层强化学习
+│   ├── 06-multi-agent/           # 多智能体强化学习
+│   ├── 07-model-based-rl/        # 基于模型的RL
+│   ├── 08-safe-rl/              # 安全强化学习
+│   ├── 09-applications/          # 应用领域
+│   └── 10-paper-surveys/         # 论文详解
 ├── 06-robotics/                  # 机器人学基础
+│   ├── 01-fundamentals/          # 机器人学基础
+│   ├── 02-kinematics/            # 机器人运动学
+│   ├── 03-dynamics/              # 机器人动力学
+│   ├── 04-perception/            # 机器人感知
+│   ├── 05-estimation/            # 状态估计
+│   ├── 06-planning/              # 路径规划
+│   ├── 07-robot-types/          # 机器人类型
+│   ├── 08-applications/          # 应用领域
+│   ├── 09-tools/                # 工具与平台
+│   └── 10-paper-surveys/        # 论文与综述
 ├── 07-robot-control/             # 机器人控制
-├── 08-robot-hardware/            # 机器人硬件
-├── 09-edge-deployment/           # 边缘部署与CUDA
-├── 10-large-models/              # 大模型与世界模型
-├── 11-perception-planning/       # 感知与规划控制
-├── 12-embodied-systems/          # 具身系统综合
-├── projects/                     # 实践项目
-└── resources/                    # 学习资源
+│   ├── 01-basic-control/         # 基础控制理论
+│   ├── 02-motion-control/       # 运动控制
+│   ├── 03-force-control/        # 力控制
+│   ├── 04-adaptive-control/      # 自适应控制
+│   ├── 05-robust-control/       # 鲁棒控制
+│   ├── 06-learning-control/     # 学习控制
+│   ├── 07-distributed-control/  # 分布式控制
+│   ├── 08-real-time-control/    # 实时控制
+│   ├── 09-control-frameworks/    # 控制框架
+│   └── 10-paper-surveys/        # 论文与综述
+├── 08-robot-hardware/           # 机器人硬件
+│   ├── 01-mechanical-structure/  # 机械结构
+│   ├── 02-sensors/              # 传感器系统
+│   ├── 03-actuators/            # 执行器
+│   ├── 04-embedded-systems/     # 嵌入式系统
+│   ├── 05-power-systems/        # 电源系统
+│   ├── 06-communication/        # 通信接口
+│   ├── 07-hardware-integration/ # 硬件集成
+│   ├── 08-robot-platforms/      # 机器人平台
+│   ├── 09-hardware-tools/       # 硬件工具
+│   └── 10-paper-surveys/       # 论文与综述
+├── 09-edge-deployment/          # 边缘部署与CUDA
+│   ├── 01-computer-architecture/ # 计算机体系结构
+│   ├── 02-cpu-architecture/    # CPU架构
+│   ├── 03-gpu-architecture/    # GPU架构
+│   ├── 04-parallel-computing/  # 并行计算
+│   ├── 05-high-performance/    # 高性能计算
+│   ├── 06-cuda-programming/     # CUDA编程
+│   ├── 07-model-optimization/  # 模型优化
+│   ├── 08-inference-frameworks/ # 推理框架
+│   ├── 09-edge-deployment/     # 边缘部署
+│   └── 10-paper-surveys/       # 论文与综述
+├── 10-large-models/             # 大模型与世界模型
+│   ├── 01-llm-fundamentals/    # 大语言模型基础
+│   ├── 02-vision-language/       # 视觉-语言模型
+│   ├── 03-multimodal-models/    # 多模态模型
+│   ├── 04-code-models/          # 代码模型
+│   ├── 05-reasoning-models/     # 推理模型
+│   ├── 06-world-models/        # 世界模型
+│   ├── 07-embodied-models/     # 具身AI模型
+│   ├── 08-model-alignment/     # 模型对齐
+│   ├── 09-model-deployment/    # 模型部署
+│   ├── 10-model-applications/  # 模型应用
+│   └── 11-paper-surveys/       # 论文与综述
+├── 11-perception-planning/      # 感知与规划控制
+│   ├── 01-computer-vision/     # 计算机视觉
+│   ├── 02-depth-perception/    # 深度感知
+│   ├── 03-state-estimation/    # 状态估计
+│   ├── 04-slam/                # SLAM
+│   ├── 05-path-planning/       # 路径规划
+│   ├── 06-motion-planning/     # 运动规划
+│   ├── 07-task-planning/       # 任务规划
+│   ├── 08-decision-making/     # 决策方法
+│   ├── 09-integration/         # 系统集成
+│   └── 10-paper-surveys/       # 论文与综述
+├── 12-embodied-systems/         # 具身系统综合
+│   ├── 01-embodied-concepts/   # 具身智能概念
+│   ├── 02-system-architecture/ # 系统架构
+│   ├── 03-learning-paradigms/  # 学习范式
+│   ├── 04-perception-action/   # 感知-行动闭环
+│   ├── 05-embodied-reasoning/  # 具身推理
+│   ├── 06-evaluation-benchmarks/ # 评估基准
+│   ├── 07-real-world-deployment/ # 真实部署
+│   ├── 08-applications/        # 应用场景
+│   ├── 09-cutting-edge/        # 前沿研究
+│   └── 10-paper-surveys/       # 论文详解
+├── projects/                    # 实践项目
+└── resources/                  # 学习资源
 ```
 
 ## 🚀 学习路径

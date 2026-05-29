@@ -1,148 +1,235 @@
-
 # 感知与规划控制模块
 
 ## 模块概述
 
-感知与规划控制是具身智能的核心闭环，本模块涵盖感知算法、路径规划、任务规划等内容。
+感知与规划控制是具身智能的核心闭环，本模块涵盖计算机视觉、深度感知、状态估计、路径规划、任务规划等内容，为机器人提供从感知环境到执行动作的完整能力。
 
 ## 学习目标
 
 完成本模块学习后，您将能够：
-- 理解感知算法原理
-- 掌握路径规划方法
-- 了解任务规划技术
+- 理解计算机视觉算法原理
+- 掌握深度感知和状态估计方法
+- 熟悉路径规划和运动规划技术
+- 了解任务规划和决策方法
+- 能够集成感知与规划系统
+
+---
+
+## 模块结构
+
+```
+11-perception-planning/
+├── 01-computer-vision/         # 计算机视觉
+├── 02-depth-perception/        # 深度感知
+├── 03-state-estimation/        # 状态估计
+├── 04-slam/                    # SLAM
+├── 05-path-planning/           # 路径规划
+├── 06-motion-planning/         # 运动规划
+├── 07-task-planning/           # 任务规划
+├── 08-decision-making/         # 决策方法
+├── 09-integration/             # 系统集成
+└── 10-paper-surveys/        # 论文与综述
+```
+
+---
 
 ## 学习路径
 
-### 第一部分：感知（2周）
+### 第一部分：计算机视觉（2周）
 
-#### 1.1 目标检测
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 1.1 | 图像分类 | ⭐⭐⭐ |
+| 1.2 | 目标检测 | ⭐⭐⭐⭐ |
+| 1.3 | 语义分割 | ⭐⭐⭐⭐ |
+| 1.4 | 实例分割 | ⭐⭐⭐⭐⭐ |
+| 1.5 | 关键点检测 | ⭐⭐⭐⭐ |
 
-**核心概念：**
-- 两阶段检测器（Faster R-CNN）
-- 一阶段检测器（YOLO、SSD）
-- Transformer检测器（DETR）
-
-**推荐论文：**
-- "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks"
-- "You Only Look Once: Unified, Real-Time Object Detection" (YOLO)
-- "End-to-End Object Detection with Transformers" (DETR)
-
-**实践练习：**
-- 使用YOLO进行目标检测
-- 理解不同检测器的优缺点
-
-#### 1.2 语义分割
-
-**核心概念：**
-- FCN、U-Net
-- DeepLab系列
-- 全景分割
-
-**推荐论文：**
-- "Fully Convolutional Networks for Semantic Segmentation" (FCN)
-- "U-Net: Convolutional Networks for Biomedical Image Segmentation"
-- "DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs"
-
-**实践练习：**
-- 使用U-Net进行图像分割
-- 理解分割原理
-
-#### 1.3 深度估计
-
-**核心概念：**
-- 单目深度估计
-- 双目立体视觉
-- 深度补全
-
-**推荐论文：**
-- "Depth Map Prediction from a Single Image using a Multi-Scale Deep Network"
-- "Monodepth2: Digging Into Self-Supervised Monocular Depth Estimation"
-
-**实践练习：**
-- 使用Monodepth2进行深度估计
+**核心内容**：
+- CNN分类器、Transformer
+- YOLO、Faster R-CNN、DETR
+- FCN、U-Net、DeepLab
+- Mask R-CNN、YOLACT
+- 人体姿态估计、关键点检测
 
 ---
 
-### 第二部分：路径规划（2周）
+### 第二部分：深度感知（1周）
 
-#### 2.1 全局路径规划
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 2.1 | 单目深度估计 | ⭐⭐⭐⭐ |
+| 2.2 | 双目立体视觉 | ⭐⭐⭐⭐ |
+| 2.3 | 深度补全 | ⭐⭐⭐⭐ |
+| 2.4 | LiDAR点云 | ⭐⭐⭐⭐ |
+| 2.5 | 多传感器融合 | ⭐⭐⭐⭐⭐ |
 
-**核心概念：**
-- 栅格地图
-- A*算法
-- 快速搜索随机树（RRT）
-
-**推荐论文：**
-- "A Formal Basis for the Heuristic Determination of Minimum Cost Paths" (A*)
-- "Rapidly-exploring Random Trees: A New Tool for Path Planning" (RRT)
-
-**实践练习：**
-- 实现A*算法
-- 实现RRT算法
-
-#### 2.2 局部路径规划
-
-**核心概念：**
-- DWA（动态窗口法）
-- TEb（时序弹性带）
-- 人工势场法
-
-**推荐论文：**
-- "The Dynamic Window Approach to Collision Avoidance"
-
-**实践练习：**
-- 理解DWA原理
+**核心内容**：
+- Monodepth、DepthFormer
+- 立体匹配、视差估计
+- 稀疏到稠密深度
+- 点云配准、特征提取
+- RGB-D融合、传感器融合
 
 ---
 
-### 第三部分：任务规划（2周）
+### 第三部分：状态估计（1周）
 
-#### 3.1 符号规划
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 3.1 | 滤波方法 | ⭐⭐⭐⭐ |
+| 3.2 | 视觉里程计 | ⭐⭐⭐⭐ |
+| 3.3 | 位姿估计 | ⭐⭐⭐⭐ |
+| 3.4 | SLAM基础 | ⭐⭐⭐⭐ |
+| 3.5 | 多传感器融合 | ⭐⭐⭐⭐⭐ |
 
-**核心概念：**
-- PDDL（规划域定义语言）
-- STRIPS规划
-- HTN（分层任务网络）
+**核心内容**：
+- Kalman滤波、EKF、UKF
+- 特征跟踪、直接法
+- PnP、ICP、BA
+- 前端跟踪、后端优化
+- IMU融合、GPS融合
 
-**推荐资源：**
-- 《Automated Planning: Theory & Practice》- Ghallab et al.
+---
 
-**实践练习：**
-- 理解PDDL语法
-- 设计简单的规划问题
+### 第四部分：SLAM（2周）
 
-#### 3.2 学习型规划
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 4.1 | SLAM概述 | ⭐⭐⭐⭐ |
+| 4.2 | 视觉SLAM | ⭐⭐⭐⭐⭐ |
+| 4.3 | 激光SLAM | ⭐⭐⭐⭐⭐ |
+| 4.4 | 多模态SLAM | ⭐⭐⭐⭐⭐ |
+| 4.5 | 地图构建 | ⭐⭐⭐⭐ |
 
-**核心概念：**
-- 基于RL的规划
-- 模仿学习
-- 大模型规划
+**核心内容**：
+- ORB-SLAM、LIO-SAM
+- Cartographer、LOAM
+- 视觉-惯性SLAM
+- 稠密重建、语义地图
+- 回环检测、地图优化
 
-**推荐论文：**
-- "Learning to Act: Deep Learning for Planning"
-- "Planning with Large Language Models"
+---
 
-**实践练习：**
-- 研究LLM规划方法
+### 第五部分：路径规划（2周）
+
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 5.1 | 环境表示 | ⭐⭐⭐ |
+| 5.2 | 全局规划 | ⭐⭐⭐⭐ |
+| 5.3 | 局部规划 | ⭐⭐⭐⭐ |
+| 5.4 | 避障算法 | ⭐⭐⭐⭐ |
+| 5.5 | 动态规划 | ⭐⭐⭐⭐⭐ |
+
+**核心内容**：
+- 栅格地图、拓扑地图
+- A*、Dijkstra、Jump Point
+- DWA、TEB、APF
+- 实时避障、动态障碍物
+- 时间最优、能量最优
+
+---
+
+### 第六部分：运动规划（1周）
+
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 6.1 | 运动规划基础 | ⭐⭐⭐⭐ |
+| 6.2 | 采样规划 | ⭐⭐⭐⭐⭐ |
+| 6.3 | 轨迹优化 | ⭐⭐⭐⭐⭐ |
+| 6.4 | 约束规划 | ⭐⭐⭐⭐⭐ |
+| 6.5 | 机械臂规划 | ⭐⭐⭐⭐⭐ |
+
+**核心内容**：
+- C-Space、障碍空间
+- RRT、RRT*、PRM
+- 贝塞尔曲线、样条插值
+- 动力学约束、避障约束
+- MoveIt!、轨迹生成
+
+---
+
+### 第七部分：任务规划（2周）
+
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 7.1 | 符号规划 | ⭐⭐⭐⭐ |
+| 7.2 | 分层任务网络 | ⭐⭐⭐⭐⭐ |
+| 7.3 | 规划域定义 | ⭐⭐⭐⭐ |
+| 7.4 | 学习型规划 | ⭐⭐⭐⭐⭐ |
+| 7.5 | 大模型规划 | ⭐⭐⭐⭐⭐ |
+
+**核心内容**：
+- PDDL、STRIPS
+- HTN规划、GOLOG
+- 规划器（Fast Downward）
+- RL规划、模仿学习
+- LLM规划、神经符号规划
+
+---
+
+### 第八部分：决策方法（1周）
+
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 8.1 | 决策理论 | ⭐⭐⭐⭐ |
+| 8.2 | 马尔可夫决策过程 | ⭐⭐⭐⭐ |
+| 8.3 | 部分可观测MDP | ⭐⭐⭐⭐⭐ |
+| 8.4 | 多目标决策 | ⭐⭐⭐⭐ |
+| 8.5 | 在线决策 | ⭐⭐⭐⭐⭐ |
+
+**核心内容**：
+- 效用理论、贝叶斯决策
+- MDP、值迭代、策略迭代
+- POMDP、信念状态
+- 多目标优化、权衡分析
+- 实时决策、在线学习
+
+---
+
+### 第九部分：系统集成（1周）
+
+| 章节 | 内容 | 难度 |
+|------|------|------|
+| 9.1 | 系统架构 | ⭐⭐⭐⭐ |
+| 9.2 | 感知-规划闭环 | ⭐⭐⭐⭐⭐ |
+| 9.3 | ROS集成 | ⭐⭐⭐⭐ |
+| 9.4 | 仿真测试 | ⭐⭐⭐⭐ |
+| 9.5 | 实际部署 | ⭐⭐⭐⭐⭐ |
+
+**核心内容**：
+- 分层架构、模块化设计
+- 感知→状态估计→规划→控制
+- ROS Navigation、MoveIt!
+- Gazebo仿真、硬件在环
+- 真实机器人部署、调试
 
 ---
 
 ## 推荐学习资源
 
 ### 书籍
-1. 《Planning Algorithms》- LaValle
-2. 《Automated Planning: Theory & Practice》- Ghallab et al.
-3. 《Computer Vision: Algorithms and Applications》- Szeliski
+1. 《Computer Vision: Algorithms and Applications》- Szeliski
+2. 《Planning Algorithms》- Steven M. LaValle
+3. 《Automated Planning: Theory & Practice》- Ghallab et al.
+4. 《Probabilistic Robotics》- Sebastian Thrun
+5. 《SLAM for Beginners》- Cyrill Stachniss
 
 ### 在线课程
-1. Coursera - AI for Robotics
-2. edX - Robotics Planning and Control
+1. **Coursera - AI for Robotics** - Sebastian Thrun
+2. **CS231n** - Stanford Computer Vision
+3. **CS287** - UC Berkeley Advanced Robotics
+4. **SLAM Course** - ETH Zurich
+5. **ROS Tutorials** - ROS Wiki
 
-### 工具
-- OpenCV - 计算机视觉
-- MoveIt! - 运动规划
-- ROS Navigation - 导航栈
+### 工具与框架
+1. **OpenCV** - 计算机视觉
+2. **PyTorch/TensorFlow** - 深度学习
+3. **ROS Navigation** - 导航栈
+4. **MoveIt!** - 运动规划
+5. **Gazebo** - 仿真平台
+
+---
 
 ## 学习评估
 
@@ -150,12 +237,38 @@
 1. 比较YOLO与Faster R-CNN的优缺点
 2. 解释A*算法的启发式函数
 3. 说明任务规划与路径规划的区别
+4. 什么是SLAM？它由哪些部分组成？
+5. 动态窗口法（DWA）的原理是什么？
 
 ### 实践项目
 1. 使用YOLO进行实时目标检测
-2. 实现A*路径规划
-3. 设计简单的PDDL规划问题
+2. 实现A*路径规划算法
+3. 使用ROS Navigation进行移动机器人导航
+4. 设计简单的PDDL规划问题
+5. 在Gazebo中集成感知与规划系统
 
 ---
 
-**下一个模块：** [具身系统综合](../12-embodied-systems/README.md)
+## 模块关系
+
+```
+具身智能
+├── 01-physics (物理基础) ← 前置模块
+├── 02-slam-3dreconstruction (SLAM) ← 相关模块
+├── 06-robotics (机器人学) ← 前置模块
+├── 07-robot-control (机器人控制) ← 前置模块
+├── 11-perception-planning (感知与规划) ← 当前模块
+└── 12-embodied-systems (具身系统) ← 综合应用
+```
+
+**学习顺序建议**：
+1. 先学习物理基础（01-physics）
+2. 学习机器人学（06-robotics）
+3. 学习机器人控制（07-robot-control）
+4. 学习本模块（11-perception-planning）
+5. 最后学习具身系统（12-embodied-systems）
+
+---
+
+**上一个模块**：[大模型模块](../10-large-models/README.md)
+**下一个模块**：[具身系统综合](../12-embodied-systems/README.md)
