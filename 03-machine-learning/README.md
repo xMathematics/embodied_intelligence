@@ -49,6 +49,12 @@
 | 1.3 | 无监督学习基础 | ⭐⭐⭐ |
 | 1.4 | 学习理论 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [1.1 机器学习概述](01-fundamentals/01-introduction.md)
+- [1.2 监督学习基础](01-fundamentals/02-supervised-learning.md)
+- [1.3 无监督学习基础](01-fundamentals/03-unsupervised-learning.md)
+- [1.4 学习理论](01-fundamentals/04-evaluation.md)
+
 **核心内容**：
 - 机器学习定义和分类
 - 监督学习 vs 无监督学习 vs 强化学习
