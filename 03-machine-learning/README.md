@@ -75,6 +75,13 @@
 | 2.4 | 支持向量机 | ⭐⭐⭐⭐ |
 | 2.5 | 决策树 | ⭐⭐⭐ |
 
+**章节链接**：
+- [2.1 线性回归](02-supervised-learning/01-linear-regression.md)
+- [2.2 逻辑回归](02-supervised-learning/02-logistic-regression.md)
+- [2.3 线性模型正则化](02-supervised-learning/03-regularization.md)
+- [2.4 支持向量机](02-supervised-learning/04-svm.md)
+- [2.5 决策树](02-supervised-learning/05-decision-tree.md)
+
 **核心内容**：
 - 线性回归、最小二乘法
 - 逻辑回归、Sigmoid函数
