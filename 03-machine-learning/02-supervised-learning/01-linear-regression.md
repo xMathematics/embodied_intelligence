@@ -194,7 +194,7 @@ $$\nabla J(\theta) = \frac{1}{m} \mathbf{X}^T (\mathbf{X}\theta - \mathbf{y})$$
 |------|------|------|
 | **MSE** | $\frac{1}{m} \sum (y - \hat{y})^2$ | 均方误差 |
 | **RMSE** | $\sqrt{\frac{1}{m} \sum (y - \hat{y})^2}$ | 均方根误差 |
-| **MAE** | $\frac{1}{m} \sum |y - \hat{y}|$ | 平均绝对误差 |
+| **MAE** | $\frac{1}{m} \sum y - \hat{y} $ | 平均绝对误差 |
 | **R²** | $1 - \frac{\sum (y - \hat{y})^2}{\sum (y - \bar{y})^2}$ | 决定系数 |
 
 ### 6.2 R²的含义
