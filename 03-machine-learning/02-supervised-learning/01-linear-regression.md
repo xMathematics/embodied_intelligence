@@ -84,9 +84,9 @@ $$y = \theta_0 + \theta_1 x_1 + \theta_2 x_2 + ... + \theta_n x_n + \epsilon$$
 $$y = \mathbf{X}\theta + \epsilon$$
 
 其中：
-- $\mathbf{X}$：特征矩阵（$m \times (n+1)$），第一列全为1（截距项）
-- $\theta$：参数向量（$(n+1) \times 1$）
-- $\epsilon$：误差向量（$m \times 1$）
+- $\mathbf{X}$：特征矩阵 $m \times (n+1)$，第一列全为1（截距项）
+- $\theta$：参数向量 $(n+1) \times 1$
+- $\epsilon$：误差向量 $m \times 1$
 
 ### 3.3 矩阵表示示例
 
@@ -194,7 +194,7 @@ $$\nabla J(\theta) = \frac{1}{m} \mathbf{X}^T (\mathbf{X}\theta - \mathbf{y})$$
 |------|------|------|
 | **MSE** | $\frac{1}{m} \sum (y - \hat{y})^2$ | 均方误差 |
 | **RMSE** | $\sqrt{\frac{1}{m} \sum (y - \hat{y})^2}$ | 均方根误差 |
-| **MAE** | $\frac{1}{m} \sum y - \hat{y} $ | 平均绝对误差 |
+| **MAE** | $\frac{1}{m} \sum (y - \hat{y}) $ | 平均绝对误差 |
 | **R²** | $1 - \frac{\sum (y - \hat{y})^2}{\sum (y - \bar{y})^2}$ | 决定系数 |
 
 ### 6.2 R²的含义
