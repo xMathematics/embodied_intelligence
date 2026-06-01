@@ -45,6 +45,13 @@
 | 1.4 | 实例分割 | ⭐⭐⭐⭐⭐ |
 | 1.5 | 关键点检测 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [1.1 图像分类](01-computer-vision/01-image-classification.md)
+- [1.2 目标检测](01-computer-vision/02-object-detection.md)
+- [1.3 语义分割](01-computer-vision/03-semantic-segmentation.md)
+- [1.4 实例分割](01-computer-vision/04-instance-segmentation.md)
+- [1.5 关键点检测](01-computer-vision/05-keypoint-detection.md)
+
 **核心内容**：
 - CNN分类器、Transformer
 - YOLO、Faster R-CNN、DETR

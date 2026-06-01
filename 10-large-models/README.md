@@ -46,6 +46,13 @@
 | 1.4 | LLM能力分析 | ⭐⭐⭐⭐ |
 | 1.5 | 上下文学习 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [1.1 Transformer架构](01-llm-fundamentals/01-transformer.md)
+- [1.2 预训练策略](01-llm-fundamentals/02-pretraining.md)
+- [1.3 著名LLM模型](01-llm-fundamentals/03-famous-models.md)
+- [1.4 LLM能力分析](01-llm-fundamentals/04-capabilities.md)
+- [1.5 上下文学习](01-llm-fundamentals/05-context-learning.md)
+
 **核心内容**：
 - 自注意力机制、Transformer编码器/解码器
 - 预训练目标（MLM、CLM）
@@ -64,6 +71,13 @@
 | 2.3 | 跨模态对齐 | ⭐⭐⭐⭐⭐ |
 | 2.4 | 视觉问答 | ⭐⭐⭐⭐ |
 | 2.5 | 图文生成 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [2.1 VLM基础](02-vision-language/01-vlm-basics.md)
+- [2.2 视觉编码器](02-vision-language/02-vision-encoder.md)
+- [2.3 跨模态对齐](02-vision-language/03-cross-modal-alignment.md)
+- [2.4 视觉问答](02-vision-language/04-visual-question-answering.md)
+- [2.5 图文生成](02-vision-language/05-image-text-generation.md)
 
 **核心内容**：
 - CLIP、ALIGN、FLAVA
@@ -84,6 +98,13 @@
 | 3.4 | 3D-语言模型 | ⭐⭐⭐⭐⭐ |
 | 3.5 | 通用多模态模型 | ⭐⭐⭐⭐⭐ |
 
+**章节链接**：
+- [3.1 多模态基础](03-multimodal-models/01-multimodal-basics.md)
+- [3.2 音频-语言模型](03-multimodal-models/02-audio-language.md)
+- [3.3 视频-语言模型](03-multimodal-models/03-video-language.md)
+- [3.4 3D-语言模型](03-multimodal-models/04-3d-language.md)
+- [3.5 通用多模态模型](03-multimodal-models/05-universal-multimodal.md)
+
 **核心内容**：
 - 多模态Transformer
 - Whisper、AudioLM
@@ -102,6 +123,13 @@
 | 4.3 | 代码补全 | ⭐⭐⭐⭐ |
 | 4.4 | 代码翻译 | ⭐⭐⭐⭐ |
 | 4.5 | 调试与优化 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [4.1 代码生成模型](04-code-models/01-code-generation.md)
+- [4.2 代码理解](04-code-models/02-code-understanding.md)
+- [4.3 代码补全](04-code-models/03-code-completion.md)
+- [4.4 代码翻译](04-code-models/04-code-translation.md)
+- [4.5 调试与优化](04-code-models/05-debugging-optimization.md)
 
 **核心内容**：
 - CodeLlama、CodeGen、StarCoder
@@ -122,6 +150,13 @@
 | 5.4 | 符号推理 | ⭐⭐⭐⭐⭐ |
 | 5.5 | 工具使用 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [5.1 推理能力](05-reasoning-models/01-reasoning-capabilities.md)
+- [5.2 思维链推理](05-reasoning-models/02-chain-of-thought.md)
+- [5.3 数学推理](05-reasoning-models/03-mathematical-reasoning.md)
+- [5.4 符号推理](05-reasoning-models/04-symbolic-reasoning.md)
+- [5.5 工具使用](05-reasoning-models/05-tool-use.md)
+
 **核心内容**：
 - 推理能力评估
 - CoT、ToT、ReAct
@@ -140,6 +175,13 @@
 | 6.3 | 状态表示学习 | ⭐⭐⭐⭐⭐ |
 | 6.4 | 长期预测 | ⭐⭐⭐⭐⭐ |
 | 6.5 | 模型预测控制 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [6.1 世界模型概念](06-world-models/01-world-model-concepts.md)
+- [6.2 动态模型学习](06-world-models/02-dynamics-learning.md)
+- [6.3 状态表示学习](06-world-models/03-state-representation.md)
+- [6.4 长期预测](06-world-models/04-long-horizon-prediction.md)
+- [6.5 模型预测控制](06-world-models/05-model-predictive-control.md)
 
 **核心内容**：
 - World Models、Dreamer
@@ -160,6 +202,13 @@
 | 7.4 | 机器人操控 | ⭐⭐⭐⭐⭐ |
 | 7.5 | 具身规划 | ⭐⭐⭐⭐⭐ |
 
+**章节链接**：
+- [7.1 具身智能概述](07-embodied-models/01-embodied-intelligence-overview.md)
+- [7.2 视觉-语言-行动模型](07-embodied-models/02-vla-models.md)
+- [7.3 具身推理](07-embodied-models/03-embodied-reasoning.md)
+- [7.4 机器人操控](07-embodied-models/04-robot-manipulation.md)
+- [7.5 具身规划](07-embodied-models/05-embodied-planning.md)
+
 **核心内容**：
 - PaLM-E、OpenVLA、RT-X
 - 决策Transformer
@@ -178,6 +227,13 @@
 | 8.3 | RLHF | ⭐⭐⭐⭐⭐ |
 | 8.4 | RLAIF | ⭐⭐⭐⭐⭐ |
 | 8.5 | 安全性 | ⭐⭐⭐⭐ |
+
+**章节链接**：
+- [8.1 对齐概述](08-model-alignment/01-alignment-overview.md)
+- [8.2 指令微调](08-model-alignment/02-instruction-tuning.md)
+- [8.3 人类反馈强化学习](08-model-alignment/03-rlhf.md)
+- [8.4 价值对齐](08-model-alignment/04-value-alignment.md)
+- [8.5 安全对齐](08-model-alignment/05-safety-alignment.md)
 
 **核心内容**：
 - 对齐目标与挑战
@@ -198,6 +254,13 @@
 | 9.4 | 分布式推理 | ⭐⭐⭐⭐⭐ |
 | 9.5 | 服务部署 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [9.1 模型压缩](09-model-deployment/01-model-compression.md)
+- [9.2 量化技术](09-model-deployment/02-quantization.md)
+- [9.3 推理优化](09-model-deployment/03-inference-optimization.md)
+- [9.4 分布式推理](09-model-deployment/04-distributed-inference.md)
+- [9.5 服务部署](09-model-deployment/05-service-deployment.md)
+
 **核心内容**：
 - 模型剪枝、知识蒸馏
 - INT4/INT8量化、GPTQ/AWQ
@@ -211,18 +274,25 @@
 
 | 章节 | 内容 | 难度 |
 |------|------|------|
-| 10.1 | 对话系统 | ⭐⭐⭐⭐ |
-| 10.2 | 内容创作 | ⭐⭐⭐⭐ |
-| 10.3 | 教育应用 | ⭐⭐⭐⭐ |
-| 10.4 | 科学研究 | ⭐⭐⭐⭐⭐ |
-| 10.5 | 行业应用 | ⭐⭐⭐⭐ |
+| 10.1 | 文本生成应用 | ⭐⭐⭐⭐ |
+| 10.2 | 对话系统 | ⭐⭐⭐⭐ |
+| 10.3 | 代码生成应用 | ⭐⭐⭐⭐ |
+| 10.4 | 多模态应用 | ⭐⭐⭐⭐⭐ |
+| 10.5 | 综合应用 | ⭐⭐⭐⭐ |
+
+**章节链接**：
+- [10.1 文本生成应用](10-model-applications/01-text-generation.md)
+- [10.2 对话系统](10-model-applications/02-dialogue-systems.md)
+- [10.3 代码生成应用](10-model-applications/03-code-generation-apps.md)
+- [10.4 多模态应用](10-model-applications/04-multimodal-applications.md)
+- [10.5 综合应用](10-model-applications/05-comprehensive-applications.md)
 
 **核心内容**：
+- 文本生成、创意写作
 - Chatbot、智能助手
-- 写作、代码生成
-- 个性化学习、辅导
-- 科学发现、药物研发
-- 金融、医疗、法律应用
+- 代码生成、代码优化
+- 图像描述、视觉问答
+- 综合AI应用平台
 
 ---
 
