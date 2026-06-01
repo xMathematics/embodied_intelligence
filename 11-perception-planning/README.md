@@ -71,6 +71,13 @@
 | 2.4 | LiDAR点云 | ⭐⭐⭐⭐ |
 | 2.5 | 多传感器融合 | ⭐⭐⭐⭐⭐ |
 
+**章节链接**：
+- [2.1 单目深度估计](02-depth-perception/01-mono-depth-estimation.md)
+- [2.2 双目立体视觉](02-depth-perception/02-stereo-vision.md)
+- [2.3 深度补全](02-depth-perception/03-depth-completion.md)
+- [2.4 LiDAR点云](02-depth-perception/04-lidar-pointcloud.md)
+- [2.5 多传感器融合](02-depth-perception/05-multi-sensor-fusion.md)
+
 **核心内容**：
 - Monodepth、DepthFormer
 - 立体匹配、视差估计
@@ -89,6 +96,13 @@
 | 3.3 | 位姿估计 | ⭐⭐⭐⭐ |
 | 3.4 | SLAM基础 | ⭐⭐⭐⭐ |
 | 3.5 | 多传感器融合 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [3.1 滤波方法](03-state-estimation/01-filtering-methods.md)
+- [3.2 视觉里程计](03-state-estimation/02-visual-odometry.md)
+- [3.3 位姿估计](03-state-estimation/03-pose-estimation.md)
+- [3.4 SLAM基础](03-state-estimation/04-slam-basics.md)
+- [3.5 多传感器融合](03-state-estimation/05-sensor-fusion.md)
 
 **核心内容**：
 - Kalman滤波、EKF、UKF
@@ -109,6 +123,13 @@
 | 4.4 | 多模态SLAM | ⭐⭐⭐⭐⭐ |
 | 4.5 | 地图构建 | ⭐⭐⭐⭐ |
 
+**章节链接**：
+- [4.1 SLAM概述](04-slam/01-slam-overview.md)
+- [4.2 视觉SLAM](04-slam/02-visual-slam.md)
+- [4.3 激光SLAM](04-slam/03-lidar-slam.md)
+- [4.4 多模态SLAM](04-slam/04-multimodal-slam.md)
+- [4.5 地图构建](04-slam/05-map-building.md)
+
 **核心内容**：
 - ORB-SLAM、LIO-SAM
 - Cartographer、LOAM
@@ -127,6 +148,13 @@
 | 5.3 | 局部规划 | ⭐⭐⭐⭐ |
 | 5.4 | 避障算法 | ⭐⭐⭐⭐ |
 | 5.5 | 动态规划 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [5.1 环境表示](05-path-planning/01-environment-representation.md)
+- [5.2 全局规划](05-path-planning/02-global-planning.md)
+- [5.3 局部规划](05-path-planning/03-local-planning.md)
+- [5.4 避障算法](05-path-planning/04-obstacle-avoidance.md)
+- [5.5 动态规划](05-path-planning/05-dynamic-planning.md)
 
 **核心内容**：
 - 栅格地图、拓扑地图
@@ -147,6 +175,13 @@
 | 6.4 | 约束规划 | ⭐⭐⭐⭐⭐ |
 | 6.5 | 机械臂规划 | ⭐⭐⭐⭐⭐ |
 
+**章节链接**：
+- [6.1 运动规划基础](06-motion-planning/01-motion-planning-basics.md)
+- [6.2 采样规划](06-motion-planning/02-sampling-based-planning.md)
+- [6.3 轨迹优化](06-motion-planning/03-trajectory-optimization.md)
+- [6.4 约束规划](06-motion-planning/04-constrained-planning.md)
+- [6.5 机械臂规划](06-motion-planning/05-arm-planning.md)
+
 **核心内容**：
 - C-Space、障碍空间
 - RRT、RRT*、PRM
@@ -165,6 +200,13 @@
 | 7.3 | 规划域定义 | ⭐⭐⭐⭐ |
 | 7.4 | 学习型规划 | ⭐⭐⭐⭐⭐ |
 | 7.5 | 大模型规划 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [7.1 符号规划](07-task-planning/01-symbolic-planning.md)
+- [7.2 分层任务网络](07-task-planning/02-htn-planning.md)
+- [7.3 规划域定义](07-task-planning/03-pddl.md)
+- [7.4 学习型规划](07-task-planning/04-learning-planning.md)
+- [7.5 大模型规划](07-task-planning/05-llm-planning.md)
 
 **核心内容**：
 - PDDL、STRIPS
@@ -185,6 +227,13 @@
 | 8.4 | 多目标决策 | ⭐⭐⭐⭐ |
 | 8.5 | 在线决策 | ⭐⭐⭐⭐⭐ |
 
+**章节链接**：
+- [8.1 决策理论](08-decision-making/01-decision-theory.md)
+- [8.2 马尔可夫决策过程](08-decision-making/02-markov-decision-process.md)
+- [8.3 部分可观测MDP](08-decision-making/03-partially-observable.md)
+- [8.4 多目标决策](08-decision-making/04-multi-objective.md)
+- [8.5 在线决策](08-decision-making/05-online-decision.md)
+
 **核心内容**：
 - 效用理论、贝叶斯决策
 - MDP、值迭代、策略迭代
@@ -203,6 +252,13 @@
 | 9.3 | ROS集成 | ⭐⭐⭐⭐ |
 | 9.4 | 仿真测试 | ⭐⭐⭐⭐ |
 | 9.5 | 实际部署 | ⭐⭐⭐⭐⭐ |
+
+**章节链接**：
+- [9.1 系统架构](09-integration/01-system-architecture.md)
+- [9.2 感知-规划-闭环](09-integration/02-perception-planning-loop.md)
+- [9.3 ROS集成](09-integration/03-ros-integration.md)
+- [9.4 仿真测试](09-integration/04-simulation-testing.md)
+- [9.5 实际部署](09-integration/05-deployment.md)
 
 **核心内容**：
 - 分层架构、模块化设计
