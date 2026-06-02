@@ -514,3 +514,900 @@ print(f"InfoNCE损失: {loss.item():.4f}")
 3. Chen, T., Kornblith, S., Norouzi, M., & Hinton, G. (2020). A simple framework for contrastive learning of visual representations. In International conference on machine learning (pp. 1597-1607). PMLR.
 
 **下一节**：[著名LLM模型](03-famous-models.md)
+
+---
+
+## 9. 高级预训练策略
+
+### 9.1 ELECTRA：替换检测
+
+**问题提出：**
+MLM只预测15%的token，训练效率低。能否让所有token都参与训练？
+
+**解决方案：**
+ELECTRA（Efficiently Learning an Encoder that Classifies Token Replacements Accurately）使用替换检测任务。
+
+**核心创新：**
+1. **生成器**：小型MLM模型生成替换token
+2. **判别器**：判断每个token是否被替换
+3. **全token训练**：所有token都参与损失计算
+
+**论文核心思想（Clark et al., 2020）：**
+将MLM任务转换为二元分类任务，大幅提升训练效率。
+
+**优势：**
+- 训练效率高（所有token参与）
+- 参数效率高（判别器可以更大）
+- 性能优于MLM
+
+**挑战：**
+- 需要训练两个模型
+- 生成器和判别器的平衡
+
+**代码实现：**
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class ELECTRAGenerator(nn.Module):
+    """
+    ELECTRA生成器
+    
+    使用MLM目标生成替换token。
+    """
+    
+    def __init__(self, vocab_size, d_model=256, num_heads=4, 
+                 num_layers=4, dim_feedforward=1024, max_len=512, dropout=0.1):
+        super().__init__()
+        
+        # 嵌入层
+        self.token_embedding = nn.Embedding(vocab_size, d_model)
+        self.position_embedding = nn.Embedding(max_len, d_model)
+        self.dropout = nn.Dropout(dropout)
+        
+        # Transformer编码器
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=num_heads,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=True
+        )
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        
+        # MLM头
+        self.mlm_head = nn.Linear(d_model, vocab_size)
+    
+    def forward(self, input_ids, attention_mask=None):
+        batch_size, seq_len = input_ids.shape
+        
+        # 嵌入
+        token_embeds = self.token_embedding(input_ids)
+        position_ids = torch.arange(seq_len, device=input_ids.device).unsqueeze(0)
+        position_embeds = self.position_embedding(position_ids)
+        x = self.dropout(token_embeds + position_embeds)
+        
+        # 编码器
+        if attention_mask is not None:
+            key_padding_mask = (attention_mask == 0)
+        else:
+            key_padding_mask = None
+        
+        hidden_states = self.encoder(x, src_key_padding_mask=key_padding_mask)
+        
+        # MLM预测
+        logits = self.mlm_head(hidden_states)
+        
+        return logits
+
+
+class ELECTRADiscriminator(nn.Module):
+    """
+    ELECTRA判别器
+    
+    判断每个token是否被替换。
+    """
+    
+    def __init__(self, vocab_size, d_model=768, num_heads=12, 
+                 num_layers=12, dim_feedforward=3072, max_len=512, dropout=0.1):
+        super().__init__()
+        
+        # 嵌入层
+        self.token_embedding = nn.Embedding(vocab_size, d_model)
+        self.position_embedding = nn.Embedding(max_len, d_model)
+        self.dropout = nn.Dropout(dropout)
+        
+        # Transformer编码器
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=num_heads,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=True
+        )
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        
+        # 判别头
+        self.discriminator_head = nn.Linear(d_model, 1)
+    
+    def forward(self, input_ids, attention_mask=None):
+        batch_size, seq_len = input_ids.shape
+        
+        # 嵌入
+        token_embeds = self.token_embedding(input_ids)
+        position_ids = torch.arange(seq_len, device=input_ids.device).unsqueeze(0)
+        position_embeds = self.position_embedding(position_ids)
+        x = self.dropout(token_embeds + position_embeds)
+        
+        # 编码器
+        if attention_mask is not None:
+            key_padding_mask = (attention_mask == 0)
+        else:
+            key_padding_mask = None
+        
+        hidden_states = self.encoder(x, src_key_padding_mask=key_padding_mask)
+        
+        # 判别预测
+        logits = self.discriminator_head(hidden_states).squeeze(-1)
+        
+        return logits
+
+
+class ELECTRA(nn.Module):
+    """
+    ELECTRA模型
+    
+    论文核心思想（Clark et al., 2020）：
+    使用替换检测任务进行预训练，提升训练效率。
+    
+    训练流程：
+    1. 生成器生成替换token
+    2. 判别器判断token是否被替换
+    3. 两个模型联合训练
+    """
+    
+    def __init__(self, vocab_size, generator_config, discriminator_config):
+        super().__init__()
+        
+        self.generator = ELECTRAGenerator(vocab_size, **generator_config)
+        self.discriminator = ELECTRADiscriminator(vocab_size, **discriminator_config)
+        self.vocab_size = vocab_size
+    
+    def forward(self, input_ids, attention_mask=None, labels=None):
+        """
+        Args:
+            input_ids: (batch_size, seq_len)
+            attention_mask: (batch_size, seq_len)
+            labels: (batch_size, seq_len) 原始token（用于生成器MLM损失）
+        
+        Returns:
+            loss: 总损失
+            generator_loss: 生成器损失
+            discriminator_loss: 判别器损失
+        """
+        batch_size, seq_len = input_ids.shape
+        
+        # 生成器前向传播
+        generator_logits = self.generator(input_ids, attention_mask)
+        
+        # 生成替换token
+        with torch.no_grad():
+            # 采样替换token
+            probs = F.softmax(generator_logits, dim=-1)
+            replaced_ids = torch.multinomial(probs.view(-1, self.vocab_size), num_samples=1)
+            replaced_ids = replaced_ids.view(batch_size, seq_len)
+            
+            # 随机选择15%的位置进行替换
+            mask_ratio = 0.15
+            mask = torch.rand(batch_size, seq_len, device=input_ids.device) < mask_ratio
+            
+            # 创建替换后的输入
+            corrupted_input_ids = input_ids.clone()
+            corrupted_input_ids[mask] = replaced_ids[mask]
+            
+            # 创建判别器标签（1表示被替换，0表示原始）
+            discriminator_labels = mask.long()
+        
+        # 判别器前向传播
+        discriminator_logits = self.discriminator(corrupted_input_ids, attention_mask)
+        
+        # 计算损失
+        if labels is not None:
+            # 生成器MLM损失（只在掩码位置计算）
+            masked_positions = mask
+            generator_loss = F.cross_entropy(
+                generator_logits[masked_positions],
+                input_ids[masked_positions]
+            )
+        else:
+            generator_loss = 0.0
+        
+        # 判别器二元分类损失
+        discriminator_loss = F.binary_cross_entropy_with_logits(
+            discriminator_logits,
+            discriminator_labels.float()
+        )
+        
+        # 总损失
+        loss = generator_loss + 50 * discriminator_loss  # 判别器损失权重更高
+        
+        return loss, generator_loss, discriminator_loss
+```
+
+### 9.2 SpanBERT：片段掩码
+
+**问题提出：**
+MLM随机掩码单个token，能否更好地建模连续片段？
+
+**解决方案：**
+SpanBERT掩码连续的token片段，增强上下文建模能力。
+
+**核心创新：**
+1. **片段掩码**：随机选择连续片段进行掩码
+2. **边界目标**：预测片段的边界token
+3. **随机起始**：从片段中随机选择起始位置
+
+**论文核心思想（Joshi et al., 2020）：**
+通过掩码连续片段，模型学习更好的上下文表示。
+
+**代码实现：**
+
+```python
+import random
+import torch
+
+class SpanMasking:
+    """
+    Span掩码策略
+    
+    随机选择连续片段进行掩码。
+    """
+    
+    def __init__(self, mask_ratio=0.15, max_span_length=10, vocab_size=30522):
+        self.mask_ratio = mask_ratio
+        self.max_span_length = max_span_length
+        self.vocab_size = vocab_size
+    
+    def mask_spans(self, tokens):
+        """
+        掩码连续片段
+        
+        Args:
+            tokens: 原始token序列
+        
+        Returns:
+            masked_tokens: 掩码后的token序列
+            labels: 原始token
+            span_boundaries: 片段边界
+        """
+        masked_tokens = tokens.copy()
+        labels = [-100] * len(tokens)
+        span_boundaries = []
+        
+        num_tokens_to_mask = int(len(tokens) * self.mask_ratio)
+        num_masked = 0
+        
+        while num_masked < num_tokens_to_mask:
+            # 随机选择起始位置
+            start = random.randint(0, len(tokens) - 1)
+            
+            # 随机选择片段长度
+            span_length = random.randint(1, min(self.max_span_length, len(tokens) - start))
+            
+            # 掩码片段
+            for i in range(start, min(start + span_length, len(tokens))):
+                if masked_tokens[i] != -100:
+                    labels[i] = tokens[i]
+                    masked_tokens[i] = 103  # [MASK] token
+                    num_masked += 1
+            
+            span_boundaries.append((start, min(start + span_length, len(tokens))))
+        
+        return masked_tokens, labels, span_boundaries
+
+# 测试
+tokens = [101, 2023, 2003, 1037, 1010, 2026, 1029, 102, 0, 0, 0, 0]
+span_masker = SpanMasking()
+masked, labels, boundaries = span_masker.mask_spans(tokens)
+print(f"原始tokens: {tokens}")
+print(f"掩码后tokens: {masked}")
+print(f"片段边界: {boundaries}")
+```
+
+### 9.3 DeBERTa：解耦注意力
+
+**问题提出：**
+标准注意力将内容和位置混合在一起，能否解耦它们？
+
+**解决方案：**
+DeBERTa（Decoding-enhanced BERT with disentangled attention）将内容和位置解耦。
+
+**核心创新：**
+1. **解耦注意力**：分别计算内容注意力和位置注意力
+2. **增强解码器掩码**：相对位置编码的改进
+3. **尺度不变性**：归一化注意力权重
+
+**论文核心思想（He et al., 2020）：**
+通过解耦内容和位置，提升模型性能。
+
+**代码实现：**
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class DisentangledAttention(nn.Module):
+    """
+    解耦注意力
+    
+    分别计算内容注意力和位置注意力。
+    """
+    
+    def __init__(self, d_model, num_heads, max_len=512, dropout=0.1):
+        super().__init__()
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads
+        
+        # 内容投影
+        self.W_q_content = nn.Linear(d_model, d_model)
+        self.W_k_content = nn.Linear(d_model, d_model)
+        self.W_v_content = nn.Linear(d_model, d_model)
+        
+        # 位置投影
+        self.W_q_position = nn.Linear(d_model, d_model)
+        self.W_k_position = nn.Linear(d_model, d_model)
+        
+        # 输出投影
+        self.W_o = nn.Linear(d_model, d_model)
+        
+        # 相对位置嵌入
+        self.relative_position_embedding = nn.Embedding(2 * max_len, d_model)
+        
+        self.dropout = nn.Dropout(dropout)
+    
+    def forward(self, content, position):
+        """
+        Args:
+            content: (batch_size, seq_len, d_model) 内容嵌入
+            position: (batch_size, seq_len, d_model) 位置嵌入
+        
+        Returns:
+            output: (batch_size, seq_len, d_model)
+        """
+        batch_size, seq_len, _ = content.shape
+        
+        # 内容投影
+        Q_content = self.W_q_content(content).view(batch_size, seq_len, self.num_heads, self.d_k).transpose(1, 2)
+        K_content = self.W_k_content(content).view(batch_size, seq_len, self.num_heads, self.d_k).transpose(1, 2)
+        V_content = self.W_v_content(content).view(batch_size, seq_len, self.num_heads, self.d_k).transpose(1, 2)
+        
+        # 位置投影
+        Q_position = self.W_q_position(position).view(batch_size, seq_len, self.num_heads, self.d_k).transpose(1, 2)
+        K_position = self.W_k_position(position).view(batch_size, seq_len, self.num_heads, self.d_k).transpose(1, 2)
+        
+        # 内容注意力分数
+        content_scores = torch.matmul(Q_content, K_content.transpose(-2, -1)) / torch.sqrt(torch.tensor(self.d_k, dtype=torch.float32))
+        
+        # 位置注意力分数
+        position_scores = torch.matmul(Q_position, K_position.transpose(-2, -1)) / torch.sqrt(torch.tensor(self.d_k, dtype=torch.float32))
+        
+        # 相对位置分数
+        relative_position_ids = torch.arange(seq_len, device=content.device).unsqueeze(0) - torch.arange(seq_len, device=content.device).unsqueeze(1)
+        relative_position_ids = relative_position_ids + seq_len  # 偏移到正数
+        relative_position_embeds = self.relative_position_embedding(relative_position_ids)
+        relative_position_embeds = relative_position_embeds.view(seq_len, seq_len, self.num_heads, self.d_k).permute(2, 0, 1, 3)
+        
+        relative_scores = torch.einsum('bhqd,qkhd->bhqk', Q_position, relative_position_embeds) / torch.sqrt(torch.tensor(self.d_k, dtype=torch.float32))
+        
+        # 总注意力分数
+        scores = content_scores + position_scores + relative_scores
+        
+        # Softmax
+        attn_weights = F.softmax(scores, dim=-1)
+        attn_weights = self.dropout(attn_weights)
+        
+        # 加权求和
+        output = torch.matmul(attn_weights, V_content)
+        output = output.transpose(1, 2).contiguous().view(batch_size, seq_len, self.d_model)
+        
+        # 输出投影
+        output = self.W_o(output)
+        
+        return output
+```
+
+### 9.4 T5：Span Corruption
+
+**问题提出：**
+能否用统一的文本到文本框架进行预训练？
+
+**解决方案：**
+T5使用Span Corruption任务，将所有任务都转换为文本生成。
+
+**核心创新：**
+1. **Span Corruption**：掩码连续片段并生成
+2. **统一框架**：所有任务都是文本到文本
+3. **大规模预训练**：在C4数据集上训练
+
+**论文核心思想（Raffel et al., 2020）：**
+将预训练和下游任务统一为文本生成任务。
+
+**代码实现：**
+
+```python
+import random
+import torch
+
+class SpanCorruption:
+    """
+    Span Corruption
+    
+    类似MLM，但掩码连续片段并生成。
+    """
+    
+    def __init__(self, mask_ratio=0.15, max_span_length=10, sentinel_token_id=32000):
+        self.mask_ratio = mask_ratio
+        self.max_span_length = max_span_length
+        self.sentinel_token_id = sentinel_token_id
+        self.next_sentinel_id = sentinel_token_id
+    
+    def corrupt_spans(self, tokens):
+        """
+        腐蚀连续片段
+        
+        Args:
+            tokens: 原始token序列
+        
+        Returns:
+            corrupted_tokens: 腐蚀后的token序列
+            target_tokens: 目标token序列（被腐蚀的片段）
+        """
+        corrupted_tokens = tokens.copy()
+        target_tokens = []
+        
+        num_tokens_to_mask = int(len(tokens) * self.mask_ratio)
+        num_masked = 0
+        
+        while num_masked < num_tokens_to_mask:
+            # 随机选择起始位置
+            start = random.randint(0, len(tokens) - 1)
+            
+            # 随机选择片段长度
+            span_length = random.randint(1, min(self.max_span_length, len(tokens) - start))
+            
+            # 腐蚀片段
+            span = tokens[start:min(start + span_length, len(tokens))]
+            target_tokens.extend(span)
+            target_tokens.append(self.next_sentinel_id)
+            
+            # 替换为sentinel token
+            for i in range(start, min(start + span_length, len(tokens))):
+                if corrupted_tokens[i] != -100:
+                    corrupted_tokens[i] = self.next_sentinel_id
+                    num_masked += 1
+            
+            self.next_sentinel_id += 1
+        
+        return corrupted_tokens, target_tokens
+
+# 测试
+tokens = [101, 2023, 2003, 1037, 1010, 2026, 1029, 102, 0, 0, 0, 0]
+span_corruptor = SpanCorruption()
+corrupted, target = span_corruptor.corrupt_spans(tokens)
+print(f"原始tokens: {tokens}")
+print(f"腐蚀后tokens: {corrupted}")
+print(f"目标tokens: {target}")
+```
+
+### 9.5 BART：去噪自编码器
+
+**问题提出：**
+能否结合编码器-解码器进行预训练？
+
+**解决方案：**
+BART（Bidirectional and Auto-Regressive Transformers）使用去噪自编码器目标。
+
+**核心创新：**
+1. **编码器-解码器**：双向编码器 + 自回归解码器
+2. **多种噪声**：token掩码、token删除、句子打乱等
+3. **生成能力**：强大的文本生成能力
+
+**论文核心思想（Lewis et al., 2019）：**
+使用去噪自编码器进行预训练，结合理解和生成能力。
+
+**代码实现：**
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import random
+
+class BART(nn.Module):
+    """
+    BART模型
+    
+    论文核心思想（Lewis et al., 2019）：
+    使用去噪自编码器进行预训练。
+    
+    噪声类型：
+    - Token掩码
+    - Token删除
+    - 文本填充
+    - 句子打乱
+    """
+    
+    def __init__(self, vocab_size, d_model=768, num_heads=12, 
+                 num_encoder_layers=6, num_decoder_layers=6, 
+                 dim_feedforward=3072, max_len=512, dropout=0.1):
+        super().__init__()
+        
+        self.d_model = d_model
+        
+        # 共享嵌入层
+        self.embedding = nn.Embedding(vocab_size, d_model)
+        
+        # 编码器
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=num_heads,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=True
+        )
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_encoder_layers)
+        
+        # 解码器
+        decoder_layer = nn.TransformerDecoderLayer(
+            d_model=d_model,
+            nhead=num_heads,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
+            batch_first=True
+        )
+        self.decoder = nn.TransformerDecoder(decoder_layer, num_layers=num_decoder_layers)
+        
+        # 语言模型头
+        self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
+        self.lm_head.weight = self.embedding.weight
+    
+    def add_noise(self, input_ids, noise_type='mask'):
+        """
+        添加噪声
+        
+        Args:
+            input_ids: (batch_size, seq_len)
+            noise_type: 噪声类型
+        
+        Returns:
+            noisy_input_ids: 带噪声的输入
+            labels: 原始token
+        """
+        batch_size, seq_len = input_ids.shape
+        noisy_input_ids = input_ids.clone()
+        labels = input_ids.clone()
+        
+        if noise_type == 'mask':
+            # Token掩码
+            mask_ratio = 0.15
+            mask = torch.rand(batch_size, seq_len, device=input_ids.device) < mask_ratio
+            noisy_input_ids[mask] = 0  # [PAD] token
+        
+        elif noise_type == 'delete':
+            # Token删除
+            delete_ratio = 0.15
+            delete_mask = torch.rand(batch_size, seq_len, device=input_ids.device) < delete_ratio
+            noisy_input_ids[delete_mask] = 0
+        
+        elif noise_type == 'permute':
+            # 句子打乱
+            for i in range(batch_size):
+                seq = input_ids[i].tolist()
+                random.shuffle(seq)
+                noisy_input_ids[i] = torch.tensor(seq, device=input_ids.device)
+        
+        return noisy_input_ids, labels
+    
+    def forward(self, noisy_input_ids, target_ids, attention_mask=None):
+        """
+        Args:
+            noisy_input_ids: (batch_size, seq_len) 带噪声的输入
+            target_ids: (batch_size, seq_len) 目标序列
+            attention_mask: (batch_size, seq_len)
+        
+        Returns:
+            logits: (batch_size, seq_len, vocab_size)
+        """
+        # 编码器
+        encoder_embeds = self.embedding(noisy_input_ids) * torch.sqrt(torch.tensor(self.d_model, dtype=torch.float32))
+        
+        if attention_mask is not None:
+            encoder_key_padding_mask = (attention_mask == 0)
+        else:
+            encoder_key_padding_mask = None
+        
+        memory = self.encoder(encoder_embeds, src_key_padding_mask=encoder_key_padding_mask)
+        
+        # 解码器
+        decoder_embeds = self.embedding(target_ids) * torch.sqrt(torch.tensor(self.d_model, dtype=torch.float32))
+        
+        # 因果掩码
+        tgt_seq_len = target_ids.size(1)
+        tgt_mask = torch.triu(torch.ones(tgt_seq_len, tgt_seq_len, device=target_ids.device), diagonal=1).bool()
+        
+        output = self.decoder(decoder_embeds, memory, tgt_mask=tgt_mask)
+        
+        # 语言模型头
+        logits = self.lm_head(output)
+        
+        return logits
+```
+
+---
+
+## 10. 预训练数据增强
+
+### 10.1 数据增强策略
+
+| 策略 | 说明 | 效果 |
+|------|------|------|
+| **回译** | 翻译后翻译回原语言 | 增加多样性 |
+| **同义词替换** | 用同义词替换词 | 增强鲁棒性 |
+| **随机删除** | 随机删除词 | 增强泛化 |
+| **随机交换** | 交换相邻词 | 增强鲁棒性 |
+
+**代码实现：**
+
+```python
+import random
+
+class DataAugmentation:
+    """
+    数据增强
+    
+    通过多种策略增强训练数据。
+    """
+    
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+    
+    def synonym_replacement(self, text, n=1):
+        """
+        同义词替换
+        
+        Args:
+            text: 原始文本
+            n: 替换次数
+        
+        Returns:
+            augmented_text: 增强后的文本
+        """
+        words = text.split()
+        new_words = words.copy()
+        
+        for _ in range(n):
+            idx = random.randint(0, len(words) - 1)
+            # 这里应该使用同义词库，简化起见随机替换
+            new_words[idx] = words[random.randint(0, len(words) - 1)]
+        
+        return ' '.join(new_words)
+    
+    def random_deletion(self, text, p=0.1):
+        """
+        随机删除
+        
+        Args:
+            text: 原始文本
+            p: 删除概率
+        
+        Returns:
+            augmented_text: 增强后的文本
+        """
+        words = text.split()
+        new_words = [word for word in words if random.random() > p]
+        
+        if len(new_words) == 0:
+            return text
+        
+        return ' '.join(new_words)
+    
+    def random_swap(self, text, n=1):
+        """
+        随机交换
+        
+        Args:
+            text: 原始文本
+            n: 交换次数
+        
+        Returns:
+            augmented_text: 增强后的文本
+        """
+        words = text.split()
+        new_words = words.copy()
+        
+        for _ in range(n):
+            if len(new_words) >= 2:
+                idx1, idx2 = random.sample(range(len(new_words)), 2)
+                new_words[idx1], new_words[idx2] = new_words[idx2], new_words[idx1]
+        
+        return ' '.join(new_words)
+```
+
+### 10.2 数据质量评估
+
+**代码实现：**
+
+```python
+import re
+from collections import Counter
+
+class DataQualityAssessment:
+    """
+    数据质量评估
+    
+    评估预训练数据的质量。
+    """
+    
+    def __init__(self):
+        self.english_words = set(['the', 'be', 'to', 'of', 'and', 'a', 'in', 'that', 'have', 'i'])
+    
+    def assess_quality(self, text):
+        """
+        评估文本质量
+        
+        Args:
+            text: 待评估文本
+        
+        Returns:
+            quality_score: 质量分数（0-1）
+        """
+        score = 0.0
+        
+        # 1. 长度检查
+        if 10 <= len(text.split()) <= 1000:
+            score += 0.2
+        
+        # 2. 英语单词比例
+        words = text.lower().split()
+        english_ratio = sum(1 for word in words if word in self.english_words) / len(words)
+        score += english_ratio * 0.3
+        
+        # 3. 特殊字符比例
+        special_chars = len(re.findall(r'[^a-zA-Z0-9\s]', text))
+        special_ratio = special_chars / len(text)
+        if special_ratio < 0.1:
+            score += 0.2
+        
+        # 4. 重复字符检查
+        max_repeat = max(len(list(g)) for k, g in itertools.groupby(text))
+        if max_repeat < 5:
+            score += 0.2
+        
+        # 5. 词频多样性
+        word_freq = Counter(words)
+        unique_ratio = len(word_freq) / len(words)
+        score += unique_ratio * 0.1
+        
+        return score
+```
+
+---
+
+## 11. 预训练优化
+
+### 11.1 学习率调度
+
+**代码实现：**
+
+```python
+import math
+
+class PretrainingScheduler:
+    """
+    预训练学习率调度器
+    
+    结合warmup和余弦衰减。
+    """
+    
+    def __init__(self, optimizer, warmup_steps, total_steps, min_lr=0, peak_lr=1e-4):
+        self.optimizer = optimizer
+        self.warmup_steps = warmup_steps
+        self.total_steps = total_steps
+        self.min_lr = min_lr
+        self.peak_lr = peak_lr
+        self.current_step = 0
+    
+    def step(self):
+        """更新学习率"""
+        self.current_step += 1
+        
+        if self.current_step < self.warmup_steps:
+            # Warmup阶段：线性增加
+            lr = self.peak_lr * self.current_step / self.warmup_steps
+        else:
+            # 衰减阶段：余弦衰减
+            progress = (self.current_step - self.warmup_steps) / (self.total_steps - self.warmup_steps)
+            lr = self.min_lr + (self.peak_lr - self.min_lr) * 0.5 * (1 + math.cos(math.pi * progress))
+        
+        # 更新优化器学习率
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = lr
+        
+        return lr
+```
+
+### 11.2 梯度累积
+
+**代码实现：**
+
+```python
+class GradientAccumulator:
+    """
+    梯度累积器
+    
+    通过累积多个小批量的梯度来模拟大批量训练。
+    """
+    
+    def __init__(self, model, optimizer, accumulation_steps):
+        self.model = model
+        self.optimizer = optimizer
+        self.accumulation_steps = accumulation_steps
+        self.current_step = 0
+    
+    def step(self, loss):
+        """执行训练步骤"""
+        # 计算梯度
+        loss = loss / self.accumulation_steps
+        loss.backward()
+        
+        self.current_step += 1
+        
+        # 累积足够后更新参数
+        if self.current_step % self.accumulation_steps == 0:
+            self.optimizer.step()
+            self.optimizer.zero_grad()
+```
+
+---
+
+## 12. 总结
+
+预训练是现代大语言模型的核心技术。通过在大规模无标签数据上预训练，模型学习到丰富的语言知识和世界知识。
+
+**关键要点：**
+
+1. **预训练目标**：MLM、CLM、对比学习等
+2. **预训练数据**：数据来源、预处理、质量评估
+3. **预训练策略**：ELECTRA、SpanBERT、DeBERTa等
+4. **预训练优化**：学习率调度、梯度累积等
+
+**未来方向：**
+
+- 更高效的预训练方法
+- 更好的数据利用
+- 更强的跨任务泛化
+- 更低的计算成本
+
+---
+
+## 参考文献
+
+### 核心论文
+
+1. Devlin, J., et al. (2018). "BERT: Pre-training of Deep Bidirectional Transformers". NAACL.
+2. Radford, A., et al. (2018). "Improving Language Understanding by Generative Pre-Training". OpenAI.
+3. Clark, K., et al. (2020). "ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators". ICLR.
+4. Joshi, M., et al. (2020). "SpanBERT: Improving Pre-training by Representing and Predicting Spans". TACL.
+5. He, J., et al. (2020). "DeBERTa: Decoding-enhanced BERT with Disentangled Attention". ICLR.
+6. Raffel, C., et al. (2020). "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer". JMLR.
+7. Lewis, M., et al. (2019). "BART: Denoising Sequence-to-Sequence Pre-training for Natural Language Generation, Translation, and Comprehension". EMNLP.
+
+### 预训练技术
+
+1. Liu, Y., et al. (2019). "RoBERTa: A Robustly Optimized BERT Pretraining Approach". arXiv.
+2. Lan, Z., et al. (2019). "ALBERT: A Lite BERT for Self-supervised Learning of Language Representations". ICLR.
+3. Yang, Z., et al. (2019). "XLNet: Generalized Autoregressive Pretraining for Language Understanding". NeurIPS.
