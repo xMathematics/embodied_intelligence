@@ -2,271 +2,201 @@
 
 ## 模块概述
 
-本模块涵盖计算机底层硬件结构、并行计算原理、CPU/GPU架构以及边缘设备上的AI模型部署。从计算机体系结构基础开始，深入讲解并行编程、GPU计算、模型优化和边缘部署技术。
+本模块系统性地覆盖从计算机底层硬件架构、并行计算原理、GPU编程到深度学习模型优化、推理加速以及边缘设备部署的完整知识链。**核心目标**是让读者深入理解如何将具身智能机器人中的深度学习模型（感知、控制、规划等）高效部署到资源受限的边缘计算平台上，实现实时、低功耗、高可靠的机器人智能系统。
 
-## 学习目标
+### 为什么需要边缘部署？
 
-完成本模块学习后，您将能够：
-- 理解计算机底层硬件结构和CPU架构
-- 掌握GPU架构和CUDA编程
-- 理解并行计算原理和算法设计
-- 掌握深度学习模型优化技术
-- 能够部署模型到边缘设备
-- 进行性能分析和调优
+| 挑战 | 说明 | 具身智能中的具体场景 |
+|------|------|---------------------|
+| **实时性要求** | 云端推理延迟不可控（>100ms） | 机器人避障需<10ms响应 |
+| **带宽限制** | 高清视频/点云数据量巨大 | RealSense相机每秒产生~400MB数据 |
+| **隐私安全** | 数据不宜上传云端 | 家庭服务机器人的视觉数据 |
+| **离线运行** | 网络不可靠或无网络 | 野外勘探、深海/太空机器人 |
+| **功耗约束** | 电池供电，算力有限 | 无人机续航仅30分钟 |
 
 ---
 
-## 模块结构
+## 模块结构（重构版）
 
 ```
 09-edge-deployment/
-├── 01-computer-architecture/   # 计算机体系结构
-├── 02-cpu-architecture/        # CPU架构
-├── 03-gpu-architecture/        # GPU架构
-├── 04-parallel-computing/      # 并行计算
-├── 05-high-performance/        # 高性能计算
-├── 06-cuda-programming/        # CUDA编程
-├── 07-model-optimization/      # 模型优化
-├── 08-inference-frameworks/    # 推理框架
-├── 09-edge-deployment/         # 边缘部署
-└── 10-paper-surveys/         # 论文与综述
+├── 01-computer-architecture/      # 计算机体系结构基础
+├── 02-cpu-architecture/           # CPU处理器架构与指令优化
+├── 03-gpu-architecture/           # GPU架构与异构计算
+├── 04-parallel-computing/         # 并行计算原理与模型
+├── 05-high-performance/           # 高性能计算与云端基础设施
+├── 06-cuda-programming/           # CUDA与GPU编程实战
+├── 07-model-optimization/         # 模型压缩、量化与轻量化
+├── 08-inference-frameworks/       # 推理引擎与编译优化
+├── 09-edge-deployment/            # 边缘部署与具身智能系统
+└── 10-paper-surveys/              # 前沿论文与综述精读
 ```
 
 ---
 
-## 学习路径
+## 学习路径与具身智能映射
 
-### 第一部分：计算机体系结构（1周）
+### 第一阶段：硬件基础（第1-3章）
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 1.1 | 冯·诺依曼架构 | ⭐⭐⭐ |
-| 1.2 | 指令集架构 | ⭐⭐⭐⭐ |
-| 1.3 | 存储层次 | ⭐⭐⭐⭐ |
-| 1.4 | 总线与接口 | ⭐⭐⭐ |
-| 1.5 | 多核与众核 | ⭐⭐⭐⭐ |
+```
+计算机体系结构 ──→ CPU架构 ──→ GPU架构
+     │                 │            │
+     ▼                 ▼            ▼
+  冯·诺依曼瓶颈     流水线冲突    SIMT执行模型
+  内存层次优化       SIMD向量化     Tensor Core
+  NUMA/NUMA感知     分支预测       GPU内存层次
+```
 
-**核心内容**：
-- 冯·诺依曼瓶颈
-- CISC vs RISC
-- 缓存层次（L1/L2/L3）
-- NUMA架构
-- 内存一致性模型
+**具身智能映射**：
+- 理解**内存层次** → 优化机器人感知管线中的数据搬运
+- 掌握**SIMD/向量化** → 加速机器人运动学正逆解计算
+- 认识**GPU架构** → 为视觉大模型推理选择最优硬件
 
----
+### 第二阶段：并行计算（第4-6章）
 
-### 第二部分：CPU架构（1周）
+```
+并行计算原理 ──→ 高性能计算 ──→ CUDA编程实战
+     │                 │            │
+     ▼                 ▼            ▼
+  Amdahl定律         MPI通信       Kernel优化
+  数据并行策略       GPU集群       共享内存tile
+  任务调度           Slurm调度      Warp优化
+```
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 2.1 | CPU微架构 | ⭐⭐⭐⭐ |
-| 2.2 | 指令级并行 | ⭐⭐⭐⭐⭐ |
-| 2.3 | 超标量执行 | ⭐⭐⭐⭐⭐ |
-| 2.4 | 分支预测 | ⭐⭐⭐⭐ |
-| 2.5 | SIMD指令 | ⭐⭐⭐⭐ |
+**具身智能映射**：
+- **并行归约** → 加速点云配准（ICP算法）
+- **CUDA Stream** → 多传感器流水线并行处理
+- **MPI/分布式** → 机器人集群协同计算
 
-**核心内容**：
-- 流水线设计
-- 乱序执行
-- 推测执行
-- AVX/SSE指令集
-- 多线程与超线程
+### 第三阶段：模型优化（第7-8章）
 
----
+```
+模型压缩优化 ──→ 推理框架与编译器
+     │                 │
+     ▼                 ▼
+  量化(INT8/FP16)    TensorRT
+  剪枝(结构化)       ONNX Runtime
+  知识蒸馏           TVM / OpenVINO
+  NAS轻量化搜索      MNN/TNN移动端
+```
 
-### 第三部分：GPU架构（1周）
+**具身智能映射**：
+- **INT8量化** → 将YOLO检测模型从30ms降至5ms
+- **TensorRT** → 优化BEV感知模型在Jetson上的推理
+- **知识蒸馏** → 将VLA大模型蒸馏为轻量级策略网络
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 3.1 | GPU vs CPU | ⭐⭐⭐ |
-| 3.2 | NVIDIA GPU架构 | ⭐⭐⭐⭐ |
-| 3.3 | AMD GPU架构 | ⭐⭐⭐⭐ |
-| 3.4 | 移动GPU | ⭐⭐⭐ |
-| 3.5 | 专用AI芯片 | ⭐⭐⭐⭐ |
+### 第四阶段：系统部署（第9-10章）
 
-**核心内容**：
-- 流式多处理器（SM）
-- CUDA核心与Tensor核心
-- ROCm架构
-- Mobile GPU（Adreno、Mali）
-- TPU/NPU/ASIC
-
----
-
-### 第四部分：并行计算（2周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 4.1 | 并行计算基础 | ⭐⭐⭐ |
-| 4.2 | 并行编程模型 | ⭐⭐⭐⭐ |
-| 4.3 | 并行算法设计 | ⭐⭐⭐⭐ |
-| 4.4 | 同步与通信 | ⭐⭐⭐⭐ |
-| 4.5 | 并行模式 | ⭐⭐⭐⭐ |
-
-**核心内容**：
-- SIMD、MIMD、SPMD
-- OpenMP、MPI
-- 数据并行与任务并行
-- 锁与同步原语
-- MapReduce、数据流
+```
+边缘部署系统 ──→ 前沿论文精读
+     │                 │
+     ▼                 ▼
+  Jetson/FPGA/NPU    量化算法论文
+  实时推理管线       模型编译器论文
+  功耗优化           边缘SLAM论文
+  多模态融合部署     具身VLA部署论文
+```
 
 ---
 
-### 第五部分：高性能计算（1周）
+## 各章节知识点速览
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 5.1 | HPC集群 | ⭐⭐⭐⭐ |
-| 5.2 | 分布式计算 | ⭐⭐⭐⭐ |
-| 5.3 | 云计算平台 | ⭐⭐⭐ |
-| 5.4 | 超级计算机 | ⭐⭐⭐⭐ |
-| 5.5 | 性能度量 | ⭐⭐⭐⭐ |
-
-**核心内容**：
-- 集群架构
-- InfiniBand网络
-- AWS/GCP/Azure GPU实例
-- TOP500榜单
-- FLOPS、能效比
-
----
-
-### 第六部分：CUDA编程（2周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 6.1 | CUDA编程模型 | ⭐⭐⭐⭐ |
-| 6.2 | Kernel编程 | ⭐⭐⭐⭐ |
-| 6.3 | 内存层次优化 | ⭐⭐⭐⭐⭐ |
-| 6.4 | Warp优化 | ⭐⭐⭐⭐⭐ |
-| 6.5 | 高级CUDA技术 | ⭐⭐⭐⭐⭐ |
-
-**核心内容**：
-- 线程层次（Grid/Block/Thread）
-- 共享内存、常量内存
-- 合并内存访问
-- Warp shuffle
-- CUDA Streams、Async
-
----
-
-### 第七部分：模型优化（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 7.1 | 模型压缩 | ⭐⭐⭐⭐ |
-| 7.2 | 量化技术 | ⭐⭐⭐⭐ |
-| 7.3 | 剪枝与稀疏化 | ⭐⭐⭐⭐ |
-| 7.4 | 知识蒸馏 | ⭐⭐⭐⭐ |
-| 7.5 | 神经架构搜索 | ⭐⭐⭐⭐⭐ |
-
-**核心内容**：
-- 权重共享、低秩分解
-- INT8/FP16量化
-- 结构化/非结构化剪枝
-- Teacher-Student训练
-- NAS搜索空间
-
----
-
-### 第八部分：推理框架（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 8.1 | TensorRT | ⭐⭐⭐⭐ |
-| 8.2 | ONNX Runtime | ⭐⭐⭐⭐ |
-| 8.3 | OpenVINO | ⭐⭐⭐⭐ |
-| 8.4 | TVM | ⭐⭐⭐⭐⭐ |
-| 8.5 | MNN/TNN | ⭐⭐⭐⭐ |
-
-**核心内容**：
-- 图优化、算子融合
-- 量化感知训练
-- 异构推理
-- AutoTVM优化
-- 移动端框架
-
----
-
-### 第九部分：边缘部署（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 9.1 | 边缘设备 | ⭐⭐⭐ |
-| 9.2 | 部署流程 | ⭐⭐⭐⭐ |
-| 9.3 | 性能优化 | ⭐⭐⭐⭐ |
-| 9.4 | 低功耗设计 | ⭐⭐⭐⭐ |
-| 9.5 | 实际案例 | ⭐⭐⭐⭐ |
-
-**核心内容**：
-- Jetson、RK3588、NPU
-- 模型转换与优化
-- 内存优化、延迟优化
-- 电源管理
-- 机器人/自动驾驶部署
+| 章节 | 核心知识点 | 在具身智能中的作用 | 解决的关键问题 |
+|------|-----------|-------------------|---------------|
+| 01 | 冯·诺依曼架构、存储层次、总线、多核架构 | 理解机器人计算平台的硬件瓶颈 | 计算与访存带宽不匹配 |
+| 02 | 流水线、超标量、SIMD、分支预测 | 优化底层控制循环和感知前处理 | 控制频率受限、数据搬运慢 |
+| 03 | SM架构、Tensor Core、显存层次、移动GPU | GPU加速视觉/点云推理 | 大规模并行计算需求 |
+| 04 | Amdahl、并行模式、同步原语 | 设计多传感器融合并行管线 | 串行瓶颈导致延迟累积 |
+| 05 | MPI/OpenMP、GPU集群、容器化 | 分布式训练、仿真集群 | 单机算力不足以训练大模型 |
+| 06 | CUDA Kernel、共享内存、Stream | 自定义算子加速机器人感知 | 标准库算子性能不足 |
+| 07 | 量化、剪枝、蒸馏、NAS | 模型轻量化适配边缘设备 | 边缘设备显存/算力受限 |
+| 08 | TensorRT、ONNX、TVM、OpenVINO | 跨平台模型部署与加速 | 模型-硬件适配效率低 |
+| 09 | Jetson、FPGA、实时管线、功耗优化 | 完整机器人系统部署 | 系统集成与工程落地 |
+| 10 | 各方向经典论文精读 | 把握前沿技术动态 | 理论与实践的桥梁 |
 
 ---
 
 ## 推荐学习资源
 
-### 书籍
-1. 《Computer Architecture: A Quantitative Approach》- Hennessy & Patterson
-2. 《Programming Massively Parallel Processors》- Kirk & Hwu
-3. 《CUDA Programming Guide》- NVIDIA
-4. 《High Performance Computing》- Gropp et al.
-5. 《Deep Learning Optimization for Edge Deployment》- Wang et al.
+### 经典书籍
+1. **Computer Architecture: A Quantitative Approach** (Hennessy & Patterson, 6th Ed.)
+2. **Programming Massively Parallel Processors** (Kirk & Hwu, 4th Ed.)
+3. **CUDA C++ Programming Guide** - NVIDIA Official
+4. **Deep Learning with PyTorch: Model Optimization and Deployment**
+5. **Efficient Processing of Deep Neural Networks** (Vivienne Sze et al.)
 
 ### 在线课程
 1. **MIT 6.004 - Computation Structures**
-2. **UC Berkeley CS267 - Parallel Computing**
-3. **NVIDIA CUDA Training**
-4. **HPC University Courses**
-5. **Edge AI Certification**
+2. **UIUC ECE 408 - GPU Programming**
+3. **NVIDIA DLI - CUDA/TensorRT/Jetson 认证课程**
+4. **Stanford CS231n - Efficient AI Inference**
+5. **TinyML and Efficient Deep Learning** (Harvard)
 
 ### 工具与框架
-1. **CUDA Toolkit** - GPU编程
-2. **TensorRT** - 推理优化
-3. **ONNX Runtime** - 跨平台推理
-4. **TVM** - 深度学习编译器
-5. **NVIDIA Jetson** - 边缘平台
+| 工具 | 用途 | 在具身智能中的典型应用 |
+|------|------|----------------------|
+| CUDA Toolkit | GPU通用计算 | 加速点云处理、图像预处理 |
+| TensorRT | 推理优化 | Jetson上部署YOLO/BEV感知 |
+| ONNX Runtime | 跨平台推理 | 模型在不同机器人平台间迁移 |
+| TVM | 深度学习编译器 | 自动调优适配新硬件 |
+| NVIDIA Jetson | 边缘AI平台 | 机器人主控/协处理器 |
+| Intel OpenVINO | Intel硬件优化 | 在Intel NUC上部署感知模型 |
+| TensorFlow Lite | 移动端推理 | 在树莓派上运行轻量模型 |
+| ROS2 + micro-ROS | 机器人中间件 | 边缘节点与主控通信 |
 
 ---
 
-## 学习评估
+## 模块关系与前置知识
+
+```
+具身智能知识体系
+├── 04-deep-learning           ◄── 前置：深度学习基础（CNN/Transformer/VLM）
+├── 05-reinforcement-learning  ◄── 前置：强化学习（策略网络训练）
+├── 06-robotics                ◄── 前置：机器人学基础（运动学/动力学）
+├── 08-robot-hardware          ◄── 相关：传感器/执行器硬件
+├── 09-edge-deployment         ◄── 当前模块
+├── 10-large-models            ◄── 后续：大模型基础架构
+├── 11-perception-planning     ◄── 后续：感知与规划算法
+└── 12-embodied-systems        ◄── 综合：完整具身智能系统
+```
+
+**建议学习顺序**：
+1. 先完成 **04-deep-learning** 深度学习基础
+2. 再完成 **06-robotics** 机器人学基础
+3. 学习本模块 **09-edge-deployment**
+4. 最后进入 **12-embodied-systems** 综合实践
+
+---
+
+## 学习目标与评估
+
+### 学习目标
+- ✅ 理解计算机底层硬件结构对AI推理性能的影响
+- ✅ 掌握CPU/GPU架构差异及其在机器人中的应用场景
+- ✅ 能够设计和实现并行算法加速机器人感知管线
+- ✅ 掌握模型量化、剪枝、蒸馏等轻量化技术
+- ✅ 熟练使用TensorRT/ONNX/TVM进行推理加速
+- ✅ 能够在Jetson等边缘设备上完整部署机器人AI模型
+- ✅ 了解前沿的边缘部署与具身智能论文
 
 ### 自测题
-1. 解释冯·诺依曼架构的瓶颈
-2. CPU和GPU的架构差异是什么？
-3. CUDA线程层次结构是怎样的？
-4. 常用的模型压缩技术有哪些？
-5. TensorRT如何优化深度学习模型？
+1. 冯·诺依曼瓶颈是什么？在机器人实时控制中如何缓解？
+2. GPU的SIMT执行模型与CPU的SIMD有何本质区别？
+3. 在Jetson Orin上部署一个7B参数的大模型需要哪些优化步骤？
+4. INT8量化对感知模型精度有多大影响？如何补偿精度损失？
+5. 对比TensorRT的算子融合与TVM的图优化，各有什么优劣？
+6. 设计一个多传感器（RGB+LiDAR+IMU）的实时推理管线，如何利用CUDA Stream并行？
 
 ### 实践项目
-1. 使用CUDA实现矩阵乘法
-2. 使用OpenMP实现并行排序
-3. 使用TensorRT优化并部署模型
-4. 在Jetson上部署YOLO模型
-5. 对比不同量化方法的效果
+| 项目 | 难度 | 描述 |
+|------|------|------|
+| CUDA矩阵乘法优化 | ⭐⭐⭐ | 使用共享内存和tile优化 |
+| YOLO TensorRT部署 | ⭐⭐⭐⭐ | 在Jetson上部署并调优 |
+| 模型量化对比实验 | ⭐⭐⭐ | 比较INT8/FP16/BF16效果 |
+| VLA模型蒸馏 | ⭐⭐⭐⭐⭐ | 将VLA蒸馏为轻量策略 |
+| 多传感器融合管线 | ⭐⭐⭐⭐ | 使用CUDA Stream并行处理 |
 
 ---
 
-## 模块关系
-
-```
-具身智能
-├── 04-deep-learning (深度学习) ← 前置模块
-├── 08-robot-hardware (机器人硬件) ← 相关模块
-├── 09-edge-deployment (边缘部署) ← 当前模块
-└── 12-embodied-systems (具身系统) ← 综合应用
-```
-
-**学习顺序建议**：
-1. 先学习深度学习（04-deep-learning）
-2. 学习机器人硬件（08-robot-hardware）
-3. 学习本模块（09-edge-deployment）
-4. 最后学习具身系统（12-embodied-systems）
-
----
-
-**上一个模块**：[机器人硬件](../08-robot-hardware/README.md)
-**下一个模块**：[大模型与世界模型](../10-large-models/README.md)
+> **上一个模块**：[机器人硬件](../08-robot-hardware/README.md)
+> **下一个模块**：[大模型与世界模型](../10-large-models/README.md)
