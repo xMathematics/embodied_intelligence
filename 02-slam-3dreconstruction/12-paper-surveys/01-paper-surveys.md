@@ -1,203 +1,195 @@
-# 论文详解
+# 12. 论文详解
 
-## 概述
+## 1. 概述
 
-本模块对SLAM和三维重建领域的重要论文进行详细解读。
+本章汇总SLAM和三维重建领域的经典和前沿论文的详细分析。
 
-## 论文列表
+## 2. SLAM经典论文
 
-### 1. SIFT (2004)
+### 2.1 ORB-SLAM系列
 
-**作者**: David G. Lowe
+**ORB-SLAM (2015)**：
+- Title: ORB-SLAM: A Versatile and Accurate Monocular SLAM System
+- Authors: Raul Mur-Artal, J. M. M. Montiel, Juan D. Tardós
+- Venue: IEEE Transactions on Robotics
 
-**发表期刊**: IJCV
+**ORB-SLAM2 (2017)**：
+- Title: ORB-SLAM2: An Open-Source SLAM System for Monocular, Stereo and RGB-D Cameras
+- Authors: Raul Mur-Artal, Juan D. Tardós
+- Venue: IEEE Transactions on Robotics
 
-**核心贡献**:
-- 尺度不变特征变换
-- 关键点检测
-- 特征描述子
-- 匹配算法
+**ORB-SLAM3 (2020)**：
+- Title: ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial, and Multimap SLAM
+- Authors: Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, et al.
+- Venue: IEEE Transactions on Robotics
 
-**架构**:
-- 尺度空间构建
-- 关键点检测
-- 方向分配
-- 描述子生成
+### 2.2 DSO (2016)
 
-**解决的问题**:
-- 尺度变化
-- 旋转不变性
-- 光照变化
+**Title**: Direct Sparse Odometry
+**Authors**: Jakob Engel, Vladlen Koltun, Daniel Cremers
+**Venue**: IEEE Transactions on Pattern Analysis and Machine Intelligence
 
-**缺陷**:
-- 计算量大
-- 专利限制
-
----
-
-### 2. ORB (2011)
-
-**作者**: Rublee et al.
-
-**发表会议**: ICCV
-
-**核心贡献**:
-- 高效特征提取
-- 旋转不变性
-- 尺度不变性
-- 二进制描述子
-
-**架构**:
-- FAST关键点
-- BRIEF描述子
-- 方向分配
-- 金字塔
-
-**解决的问题**:
-- SIFT计算慢
-- 实时应用
-
-**缺陷**:
-- 不如SIFT稳定
-
----
-
-### 3. LSD-SLAM (2014)
-
-**作者**: Engel et al.
-
-**发表会议**: ECCV
-
-**核心贡献**:
-- 直接法SLAM
-- 大规模场景
-- 单目SLAM
-- 半稠密重建
-
-**架构**:
-- 直接图像对齐
-- 光度误差
-- 关键帧选择
-- 稀疏建图
-
-**解决的问题**:
-- 特征缺失环境
-- 实时性能
-
-**缺陷**:
-- 对光照敏感
-
----
-
-### 4. DSO (2016)
-
-**作者**: Engel et al.
-
-**发表期刊**: TPAMI
-
-**核心贡献**:
-- 直接稀疏里程计
+**关键创新**：
+- 稀疏直接法视觉里程计
 - 光度标定
-- 鲁棒估计
-- 实时性能
+- 滑动窗口优化
+- 高效关键帧管理
 
-**架构**:
-- 稀疏特征选择
-- 直接法优化
-- 深度滤波
-- 关键帧管理
+### 2.3 LSD-SLAM (2014)
 
-**解决的问题**:
-- 直接法精度
-- 计算效率
+**Title**: LSD-SLAM: Large-Scale Direct Monocular SLAM
+**Authors**: Jakob Engel, Thomas Schöps, Daniel Cremers
+**Venue**: ECCV
 
-**缺陷**:
-- 初始化困难
+### 2.4 PTAM (2007)
 
----
+**Title**: Parallel Tracking and Mapping for Small AR Workspaces
+**Authors**: Georg Klein, David Murray
+**Venue**: ISMAR
 
-### 5. ORB-SLAM3 (2020)
+### 2.5 SVO (2014)
 
-**作者**: Campos et al.
+**Title**: SVO: Fast Semi-Direct Monocular Visual Odometry
+**Authors**: Christian Forster, Matia Pizzoli, Davide Scaramuzza
+**Venue**: ICRA
 
-**发表期刊**: TPAMI
+## 3. VIO论文
 
-**核心贡献**:
-- 视觉-惯性SLAM
-- 多地图支持
-- 鲁棒初始化
-- 闭环检测
+### 3.1 MSCKF (2007)
 
-**架构**:
-- 跟踪线程
-- 局部建图
-- 回环检测
-- 全局优化
+**A Multi-State Constraint Kalman Filter for Vision-Aided Inertial Navigation**
+- Authors: Anastasios I. Mourikis, Stergios I. Roumeliotis
+- Venue: ICRA
 
-**解决的问题**:
-- 单目初始化
-- 多传感器融合
+### 3.2 OKVIS (2015)
 
-**缺陷**:
-- 计算复杂度高
+**Keyframe-Based Visual-Inertial Odometry Using Nonlinear Optimization**
+- Authors: Stefan Leutenegger, Simon Lynen, Michael Bosse, et al.
+- Venue: IJRR
 
----
+### 3.3 VINS-Mono (2018)
 
-### 6. Bundle Adjustment (2000)
+**VINS-Mono: A Robust and Versatile Monocular Visual-Inertial State Estimator**
+- Authors: Tong Qin, Peiliang Li, Shaojie Shen
+- Venue: IEEE Transactions on Robotics
 
-**作者**: Triggs et al.
+## 4. LiDAR SLAM论文
 
-**发表会议**: ICCV
+### 4.1 LOAM (2014)
 
-**核心贡献**:
-- 光束法平差综述
-- 统一框架
-- 稀疏优化
-- 数值方法
+**LOAM: Lidar Odometry and Mapping in Real-time**
+- Authors: Ji Zhang, Sanjiv Singh
+- Venue: RSS
 
-**架构**:
-- 最小二乘问题
-- 雅可比矩阵
-- 稀疏求解
-- 迭代优化
+### 4.2 Cartographer (2016)
 
-**解决的问题**:
-- 多视图几何优化
-- 相机位姿估计
+**Real-Time Loop Closure in 2D LIDAR SLAM**
+- Authors: Wolfgang Hess, Damon Kohler, Holger Rapp, Daniel Andor
+- Venue: ICRA
 
-**缺陷**:
-- 计算量大
+### 4.3 LIO-SAM (2020)
 
----
+**LIO-SAM: Tightly Coupled Lidar Inertial Odometry via Smoothing and Mapping**
+- Authors: Tixiao Shan, Brendan Englot, Drew Meyers, et al.
+- Venue: IROS
 
-### 7. iSAM2 (2012)
+## 5. 三维重建论文
 
-**作者**: Kaess et al.
+### 5.1 SfM (2016)
 
-**发表期刊**: IJRR
+**Structure-from-Motion Revisited**
+- Authors: Johannes L. Schönberger, Jan-Michael Frahm
+- Venue: CVPR
 
-**核心贡献**:
-- 增量平滑与建图
-- 贝叶斯树
-- 实时优化
-- 动态图
+### 5.2 COLMAP (2016)
 
-**架构**:
-- 增量更新
-- 变量消元
-- 条件独立性
-- 高效查询
+**Pixelwise View Selection for Unstructured Multi-View Stereo**
+- Authors: Johannes L. Schönberger, Enliang Zheng, Jan-Michael Frahm, Marc Pollefeys
+- Venue: ECCV
 
-**解决的问题**:
-- 实时SLAM优化
-- 大规模场景
+### 5.3 KinectFusion (2011)
 
-**缺陷**:
-- 内存占用
+**KinectFusion: Real-Time Dense Surface Mapping and Tracking**
+- Authors: Richard A. Newcombe, et al.
+- Venue: ISMAR
 
----
+### 5.4 BundleFusion (2017)
 
-### 8. NeRF (2020)
+**BundleFusion: Real-Time Globally Consistent 3D Reconstruction Using On-the-Fly Surface Reintegration**
+- Authors: Angela Dai, Matthias Nießner, Michael Zollhöfer, et al.
+- Venue: ACM Transactions on Graphics
+
+## 6. 神经重建论文
+
+### 6.1 NeRF (2020)
+
+**NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis**
+- Authors: Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, et al.
+- Venue: ECCV
+
+### 6.2 Instant-NGP (2022)
+
+**Instant Neural Graphics Primitives with a Multiresolution Hash Encoding**
+- Authors: Thomas Müller, Alex Evans, Christoph Schied, Alexander Keller
+- Venue: SIGGRAPH
+
+### 6.3 3D Gaussian Splatting (2023)
+
+**3D Gaussian Splatting for Real-Time Radiance Field Rendering**
+- Authors: Bernhard Kerbl, Georgios Kopanas, Thomas Leimkühler, George Drettakis
+- Venue: ACM Transactions on Graphics
+
+### 6.4 NeuS (2021)
+
+**NeuS: Learning Neural Implicit Surfaces by Volume Rendering for Multi-View Reconstruction**
+- Authors: Peng Wang, Lingjie Liu, Yuan Liu, et al.
+- Venue: NeurIPS
+
+## 7. 神经SLAM论文
+
+### 7.1 iMAP (2021)
+
+**iMAP: Implicit Mapping and Positioning in Real-Time**
+- Authors: Edgar Sucar, Shikun Liu, Joseph Ortiz, Andrew J. Davison
+- Venue: ICCV
+
+### 7.2 NICE-SLAM (2022)
+
+**NICE-SLAM: Neural Implicit Scalable Encoding for SLAM**
+- Authors: Zihan Zhu, Songyou Peng, Viktor Larsson, et al.
+- Venue: CVPR
+
+### 7.3 DROID-SLAM (2021)
+
+**DROID-SLAM: Deep Visual SLAM for Monocular, Stereo, and RGB-D Cameras**
+- Authors: Zachary Teed, Jia Deng
+- Venue: NeurIPS
+
+### 7.4 SplaTAM (2024)
+
+**SplaTAM: Splat, Track & Map 3D Gaussians for Dense RGB-D SLAM**
+- Authors: Nikhil Keetha, Jay Karhade, Krishna Murthy Jatavallabhula, et al.
+- Venue: CVPR
+
+## 8. 回环检测论文
+
+### 8.1 DBoW2 (2012)
+
+**Bags of Binary Words for Fast Place Recognition in Image Sequences**
+- Authors: Dorian Gálvez-López, Juan D. Tardós
+- Venue: IEEE Transactions on Robotics
+
+### 8.2 NetVLAD (2016)
+
+**NetVLAD: CNN Architecture for Weakly Supervised Place Recognition**
+- Authors: Relja Arandjelovic, Petr Gronat, Akihiko Torii, et al.
+- Venue: CVPR
+
+## 9. 综述论文
+
+1. Cadena, C., et al. (2016). Past, present, and future of simultaneous localization and mapping: Toward the robust-perception age. *IEEE Transactions on Robotics*, 32(6), 1309-1332.
+2. Durrant-Whyte, H., & Bailey, T. (2006). Simultaneous localization and mapping: Part I. *IEEE Robotics & Automation Magazine*, 13(2), 99-110.
+3. Bailey, T., & Durrant-Whyte, H. (2006). Simultaneous localization and mapping (SLAM): Part II. *IEEE Robotics & Automation Magazine*, 13(3), 108-117.
 
 **作者**: Mildenhall et al.
 

@@ -2,16 +2,18 @@
 
 ## 模块概述
 
-同时定位与地图构建（SLAM）和三维重建是具身智能的核心技术之一。本模块从基础理论到前沿方法，全面覆盖视觉里程计、SLAM算法、多传感器融合、三维重建等内容，并深入探讨未来研究方向。
+同时定位与地图构建（Simultaneous Localization and Mapping, SLAM）和三维重建（3D Reconstruction）是具身智能（Embodied Intelligence）的核心技术之一。本模块从基础理论到最前沿算法，全面覆盖SLAM与三维重建的所有核心方向，涵盖传统算法与基于学习的最新方法。
 
 ## 学习目标
 
 完成本模块学习后，您将能够：
-- 理解视觉里程计原理和实现方法
-- 掌握主流SLAM算法的前端和后端设计
-- 理解多传感器融合策略
-- 掌握传统和神经三维重建方法
-- 了解SLAM和重建领域的前沿研究方向
+- 深入理解SLAM问题的数学建模和概率框架
+- 掌握视觉里程计（前端）的各类原理和实现方法
+- 掌握主流SLAM系统的前端与后端设计
+- 理解多传感器融合策略与设计哲学
+- 掌握传统三维重建（SfM、MVS）的完整管线
+- 掌握神经三维重建（NeRF、3DGS）的核心原理
+- 了解SLAM和重建领域的最新前沿方向和研究趋势
 
 ---
 
@@ -19,185 +21,103 @@
 
 ```
 02-slam-3dreconstruction/
-├── 01-slam-fundamentals/           # SLAM基础理论
-├── 02-visual-odometry/             # 视觉里程计（前端）
-├── 03-slam-backend/                # SLAM后端优化
-├── 04-multi-sensor-fusion/         # 多传感器融合
-├── 05-loop-closure/                # 回环检测
-├── 06-map-representation/          # 地图表示与管理
-├── 07-traditional-3d-reconstruction/ # 传统三维重建
-├── 08-neural-3d-reconstruction/    # 神经三维重建
-├── 09-datasets-evaluation/         # 数据集与评估
-├── 10-applications/                # 应用领域
-├── 11-cutting-edge/                # 前沿研究与未来方向
-└── 12-paper-surveys/               # 论文详解
+├── 01-slam-fundamentals/               # SLAM基础理论（10章）
+├── 02-visual-odometry/                 # 视觉里程计/前端（12章）
+├── 03-slam-backend/                    # SLAM后端优化（10章）
+├── 04-multi-sensor-fusion/             # 多传感器融合（6章）
+├── 05-loop-closure/                    # 回环检测（5章）
+├── 06-map-representation/              # 地图表示与管理（5章）
+├── 07-traditional-3d-reconstruction/   # 传统三维重建（6章）
+├── 08-neural-3d-reconstruction/        # 神经三维重建（5章）
+├── 09-datasets-evaluation/             # 数据集与评估（3章）
+├── 10-applications/                    # 应用领域
+├── 11-cutting-edge/                    # 前沿研究与未来方向
+└── 12-paper-surveys/                   # 论文详解
 ```
 
 ---
 
-## 学习路径
+## 模块目录
 
-### 第一部分：SLAM基础理论（1周）
+### 第一部分：SLAM基础理论
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 1.1 | SLAM问题定义 | ⭐⭐⭐ |
-| 1.2 | 概率模型与状态估计 | ⭐⭐⭐⭐ |
-| 1.3 | 传感器模型 | ⭐⭐⭐ |
-| 1.4 | 运动模型 | ⭐⭐⭐ |
+| 章节 | 文件 | 内容 | 难度 |
+|------|------|------|------|
+| 1.1 | 01-problem-definition.md | SLAM问题定义、历史、数学建模、分类 | ⭐⭐⭐ |
+| 1.2 | 02-bayesian-filtering.md | 贝叶斯滤波框架、马尔可夫假设、卡尔曼滤波 | ⭐⭐⭐⭐ |
+| 1.3 | 03-probabilistic-state-estimation.md | MLE/MAP/MMSE估计、高斯分布、信息形式、CRLB | ⭐⭐⭐⭐ |
+| 1.4 | 04-sensor-models.md | 相机模型（针孔/双目/RGB-D/全景）、IMU模型、LiDAR模型、GPS、标定 | ⭐⭐⭐ |
+| 1.5 | 05-motion-models.md | 速度模型、里程计模型、恒速模型、IMU运动学、IMU预积分 | ⭐⭐⭐⭐ |
+| 1.6 | 06-pose-representation.md | 旋转矩阵、欧拉角、四元数、轴角、SLERP、对比 | ⭐⭐⭐ |
+| 1.7 | 07-lie-theory.md | SO(3)/SE(3)、李代数、指数/对数映射、BCH公式、伴随 | ⭐⭐⭐⭐⭐ |
+| 1.8 | 08-spatial-uncertainty.md | 协方差传播、流形不确定性、信息矩阵、一致性分析、FEJ | ⭐⭐⭐⭐ |
+| 1.9 | 09-slam-formulations.md | Full/Online SLAM、滤波 vs 优化、因子图、MAP估计 | ⭐⭐⭐⭐ |
+| 1.10 | 10-math-foundations.md | 线性代数、SVD、稀疏求解器、优化理论、数值方法 | ⭐⭐⭐⭐ |
 
-**核心内容**：
-- SLAM问题描述与数学建模
-- 贝叶斯滤波框架
-- 马尔可夫假设
-- 传感器噪声模型
-- 位姿表示（旋转矩阵、四元数）
+### 第二部分：视觉里程计（前端）
 
----
+| 章节 | 文件 | 内容 | 难度 |
+|------|------|------|------|
+| 2.1 | 01-feature-detection.md | Harris、FAST、SIFT、SuperPoint、学习型检测器 | ⭐⭐⭐ |
+| 2.2 | 02-feature-descriptors.md | SIFT、SURF、ORB、BRISK、HardNet、SuperPoint描述子 | ⭐⭐⭐⭐ |
+| 2.3 | 03-feature-matching.md | 暴力匹配、FLANN、比率测试、RANSAC、SuperGlue、LoFTR、LightGlue | ⭐⭐⭐⭐ |
+| 2.4 | 04-epipolar-geometry.md | 对极几何、本质矩阵、基础矩阵、单应矩阵、三焦张量、退化分析 | ⭐⭐⭐⭐ |
+| 2.5 | 05-motion-estimation.md | 八点法、五点法、PnP、三角化、尺度问题 | ⭐⭐⭐⭐ |
+| 2.6 | 06-pnp-algorithms.md | P3P、EPnP、UPnP、DLS、MLPnP对比 | ⭐⭐⭐⭐ |
+| 2.7 | 07-icp-registration.md | Point-to-Point/Plane ICP、GICP、Colored ICP、NDT、鲁棒ICP | ⭐⭐⭐⭐ |
+| 2.8 | 08-direct-methods.md | 光度误差、稀疏/半稠密/稠密直接法、DSO、LSD-SLAM | ⭐⭐⭐⭐⭐ |
+| 2.9 | 09-optical-flow.md | Lucas-Kanade、Horn-Schunck、FlowNet、RAFT、GMA | ⭐⭐⭐⭐ |
+| 2.10 | 10-stereo-visual-odometry.md | 双目深度计算、立体匹配(SGM)、双目VO系统 | ⭐⭐⭐⭐ |
+| 2.11 | 11-rgbd-visual-odometry.md | RGB-D技术、光度-几何联合、DVO、飞点处理 | ⭐⭐⭐⭐ |
+| 2.12 | 12-semi-direct-vo.md | SVO原理、深度滤波、半直接法优势与局限 | ⭐⭐⭐⭐ |
 
-### 第二部分：视觉里程计（前端）（2周）
+### 第三部分：SLAM后端优化
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 2.1 | 特征提取与匹配 | ⭐⭐⭐ |
-| 2.2 | 对极几何 | ⭐⭐⭐⭐ |
-| 2.3 | PnP与ICP | ⭐⭐⭐⭐ |
-| 2.4 | 直接法 | ⭐⭐⭐⭐⭐ |
-| 2.5 | 光流估计 | ⭐⭐⭐⭐ |
+| 章节 | 文件 | 内容 | 难度 |
+|------|------|------|------|
+| 3.1 | 01-ekf-slam.md | EKF-SLAM推导、一致性分析、FEJ、SEIF | ⭐⭐⭐⭐ |
+| 3.2 | 02-particle-filter-slam.md | RBPF、FastSLAM 1.0/2.0、提议分布、重采样 | ⭐⭐⭐⭐ |
+| 3.3 | 03-nonlinear-optimization.md | 高斯-牛顿、L-M、Dog-Leg、鲁棒核函数、Cholesky / QR | ⭐⭐⭐⭐⭐ |
+| 3.4 | 04-bundle-adjustment.md | BA形式化、舒尔补、局部/全局BA、Ceres/g2o/GTSAM | ⭐⭐⭐⭐⭐ |
+| 3.5 | 05-factor-graph-optimization.md | 因子图分解、先验/运动/观测/回环因子、变量消元 | ⭐⭐⭐⭐⭐ |
+| 3.6 | 06-pose-graph-optimization.md | 位姿图模型、流形优化、DCS、Switchable Constraints | ⭐⭐⭐⭐ |
+| 3.7 | 07-isam-isam2.md | iSAM QR分解、iSAM2贝叶斯树、增量更新、流体重线性化 | ⭐⭐⭐⭐⭐ |
+| 3.8 | 08-g2o-ceres-gtsam.md | g2o/Ceres/GTSAM代码示例、功能对比、选型建议 | ⭐⭐⭐⭐ |
+| 3.9 | 09-mainstream-slam-systems.md | ORB-SLAM3、VINS-Mono、DSO、LSD-SLAM、LOAM、Cartographer详解 | ⭐⭐⭐⭐ |
+| 3.10 | 10-marginalization-schur.md | 边缘化原理、舒尔补、滑动窗口、Fill-in、FEJ | ⭐⭐⭐⭐⭐ |
 
-**核心内容**：
-- SIFT、SURF、ORB、FAST特征
-- 特征匹配与RANSAC
-- 本质矩阵、基础矩阵、单应矩阵
-- P3P、EPnP、UPnP
-- LSD-SLAM、DSO直接法
-- Lucas-Kanade、Horn-Schunck光流
+### 第四~十二部分内容详见各子模块文件
 
----
+## 学习路径建议
 
-### 第三部分：SLAM后端优化（2周）
+本模块覆盖内容广泛，建议按以下路径学习：
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 3.1 | 滤波方法 | ⭐⭐⭐⭐ |
-| 3.2 | 优化方法 | ⭐⭐⭐⭐⭐ |
-| 3.3 | 光束法平差 | ⭐⭐⭐⭐⭐ |
-| 3.4 | 因子图优化 | ⭐⭐⭐⭐⭐ |
-| 3.5 | 增量优化 | ⭐⭐⭐⭐⭐ |
+### 路径A：SLAM方向
+1. **01-slam-fundamentals**（基础理论）
+2. **02-visual-odometry**（前端）
+3. **03-slam-backend**（后端）
+4. **04-multi-sensor-fusion**（多传感器）
+5. **05-loop-closure**（回环检测）
+6. **06-map-representation**（建图）
 
-**核心内容**：
-- EKF-SLAM、UKF-SLAM
-- 粒子滤波SLAM
-- 非线性最小二乘
-- BA的数学原理与实现
-- g2o、Ceres Solver
-- iSAM、iSAM2增量优化
+### 路径B：三维重建方向
+1. **01-slam-fundamentals**（基础理论，特别是07-lie-theory）
+2. **02-visual-odometry**（前端，特别是特征相关章节）
+3. **07-traditional-3d-reconstruction**（传统方法）
+4. **08-neural-3d-reconstruction**（神经方法）
 
----
+### 路径C：全栈学习
+路径A + 路径B + 09-datasets-evaluation + 11-cutting-edge + 12-paper-surveys
 
-### 第四部分：多传感器融合（1周）
+## 内容覆盖范围
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 4.1 | 传感器类型与特性 | ⭐⭐⭐ |
-| 4.2 | 紧耦合vs松耦合 | ⭐⭐⭐⭐ |
-| 4.3 | IMU融合 | ⭐⭐⭐⭐⭐ |
-| 4.4 | LiDAR融合 | ⭐⭐⭐⭐⭐ |
-| 4.5 | GPS/视觉融合 | ⭐⭐⭐⭐ |
+本模块涵盖从传统到最前沿的核心算法：
 
-**核心内容**：
-- IMU预积分、零偏估计
-- 视觉-惯性里程计（VIO）
-- LiDAR-SLAM（LOAM、LeGO-LOAM）
-- 多传感器标定
-- 传感器融合框架（MSCKF、OKVIS）
+**传统算法**：Harris、SIFT、SURF、ORB、RANSAC、EKF-SLAM、FastSLAM、八点法、五点法、PnP/ICP、BA、LSD-SLAM、DSO、SfM、MVS(PMVS/CMVS/PatchMatch)、SGM、KinectFusion、泊松重建、Marching Cubes
 
----
+**现代方法**：ORB-SLAM系列、VINS-Mono、MSCKF、OKVIS、LOAM系列、LIO-SAM、Cartographer、NetVLAD、SuperPoint/SuperGlue、RAFT光流
 
-### 第五部分：回环检测（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 5.1 | 回环检测概述 | ⭐⭐⭐ |
-| 5.2 | 基于外观的方法 | ⭐⭐⭐⭐ |
-| 5.3 | 基于几何的方法 | ⭐⭐⭐⭐ |
-| 5.4 | 闭环融合 | ⭐⭐⭐⭐⭐ |
-| 5.5 | 时序一致性 | ⭐⭐⭐⭐ |
-
-**核心内容**：
-- Bag of Words、DBoW
-- NetVLAD、Deep Learning方法
-- 位姿图优化
-- 全局一致性约束
-- 回环验证策略
-
----
-
-### 第六部分：地图表示与管理（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 6.1 | 稀疏地图 | ⭐⭐⭐ |
-| 6.2 | 稠密地图 | ⭐⭐⭐⭐ |
-| 6.3 | 语义地图 | ⭐⭐⭐⭐⭐ |
-| 6.4 | 地图存储与更新 | ⭐⭐⭐⭐ |
-| 6.5 | 多机器人地图融合 | ⭐⭐⭐⭐⭐ |
-
-**核心内容**：
-- 点云地图、网格地图
-- OctoMap、TSDF
-- 语义分割与地图融合
-- 地图压缩与增量更新
-- 分布式SLAM
-
----
-
-### 第七部分：传统三维重建（2周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 7.1 | 结构从运动（SfM） | ⭐⭐⭐⭐ |
-| 7.2 | 多视图立体视觉（MVS） | ⭐⭐⭐⭐⭐ |
-| 7.3 | 深度估计 | ⭐⭐⭐⭐ |
-| 7.4 | 表面重建 | ⭐⭐⭐⭐⭐ |
-| 7.5 | 稠密重建系统 | ⭐⭐⭐⭐⭐ |
-
-**核心内容**：
-- COLMAP、VisualSfM
-- PatchMatch、PMVS、CMVS
-- 立体匹配算法
-- Poisson重建、Marching Cubes
-- RGB-D重建（KinectFusion、DynamicFusion）
-
----
-
-### 第八部分：神经三维重建（2周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 8.1 | NeRF基础 | ⭐⭐⭐⭐⭐ |
-| 8.2 | NeRF变体 | ⭐⭐⭐⭐⭐ |
-| 8.3 | 神经辐射场扩展 | ⭐⭐⭐⭐⭐ |
-| 8.4 | 神经表面重建 | ⭐⭐⭐⭐⭐ |
-| 8.5 | 动态场景重建 | ⭐⭐⭐⭐⭐ |
-
-**核心内容**：
-- NeRF体素渲染、位置编码
-- Instant-NGP、NeRF-W、Mip-NeRF
-- Plenoxels、TensoRF
-- NeuralSDF、Neural Mesh
-- DynamicNeRF、NSFF
-
----
-
-### 第九部分：数据集与评估（1周）
-
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 9.1 | 公开数据集 | ⭐⭐⭐ |
-| 9.2 | 评估指标 | ⭐⭐⭐⭐ |
-| 9.3 | 基准测试 | ⭐⭐⭐⭐ |
-| 9.4 | 数据集生成 | ⭐⭐⭐⭐ |
+**前沿方法**：NeRF系列(Instant-NGP/Mip-NeRF/NeRF-W)、3D Gaussian Splatting、NeuS/VolSDF、DROID-SLAM、iMAP/NICE-SLAM、SplaTAM、基础模型驱动SLAM、事件相机SLAM、终身SLAM
 
 **核心内容**：
 - KITTI、TUM RGB-D、EuRoC MAV
@@ -227,22 +147,32 @@
 
 ---
 
-### 第十一部分：前沿研究与未来方向（1周）
+### 第十一部分：前沿研究与未来方向（2周）
 
-| 章节 | 内容 | 难度 |
-|------|------|------|
-| 11.1 | 大模型与SLAM | ⭐⭐⭐⭐⭐ |
-| 11.2 | 终身SLAM | ⭐⭐⭐⭐⭐ |
-| 11.3 | 神经符号SLAM | ⭐⭐⭐⭐⭐ |
-| 11.4 | 实时大规模重建 | ⭐⭐⭐⭐⭐ |
-| 11.5 | 开放问题与挑战 | ⭐⭐⭐⭐⭐ |
+| 章节 | 文件 | 内容 | 难度 |
+|------|------|------|------|
+| 11.1 | 01-foundation-models-slam.md | 基础模型驱动SLAM（DINOv2、SAM、LLM增强、扩散模型辅助） | ⭐⭐⭐⭐⭐ |
+| 11.2 | 02-lifelong-slam.md | 终身SLAM与长期自主（多会话、增量更新、持续学习） | ⭐⭐⭐⭐⭐ |
+| 11.3 | 03-event-camera-slam.md | 事件相机SLAM（原理、事件处理、VO/SLAM系统） | ⭐⭐⭐⭐⭐ |
+| 11.4 | 04-active-slam.md | 主动SLAM与探索（信息论、前沿探索、闭环规划） | ⭐⭐⭐⭐⭐ |
+| 11.5 | 05-neural-representation-slam.md | 神经表示SLAM（iMAP、NICE-SLAM、SplaTAM、3DGS-SLAM） | ⭐⭐⭐⭐⭐ |
+| 11.6 | 06-multimodal-slam.md | 多模态SLAM（视觉-触觉、声音、热成像、水下） | ⭐⭐⭐⭐⭐ |
+| 11.7 | 07-distributed-swarm-slam.md | 分布式与群体SLAM（DDF-SAM、DOOR-SLAM、Swarm-SLAM） | ⭐⭐⭐⭐⭐ |
+| 11.8 | 08-trusted-slam.md | 可信SLAM（不确定性量化、故障检测、安全关键） | ⭐⭐⭐⭐⭐ |
+| 11.9 | 09-end-to-end-slam.md | 端到端学习SLAM（DROID-SLAM、自监督、RL-SLAM） | ⭐⭐⭐⭐⭐ |
+| 11.10 | 10-open-challenges.md | 开放问题与未来方向（动态/极端环境、因果SLAM、类脑SLAM） | ⭐⭐⭐⭐⭐ |
 
 **核心内容**：
-- LLM增强的SLAM
-- 持续学习与适应
-- 神经-符号混合系统
-- 实时NeRF渲染
-- 动态场景、低纹理、光照变化
+- DINOv2/SAM/LLM增强SLAM、视觉-语言导航
+- 终身SLAM、多会话地图融合、持续学习
+- 事件相机原理、事件处理、Event-based SLAM
+- 信息论驱动的主动探索、闭环规划
+- 3DGS-SLAM、NeRF-SLAM、神经隐式SLAM
+- 多模态融合（视觉+触觉+声音+热成像+水下）
+- 分布式因子图SLAM、群体SLAM
+- 不确定性量化、故障检测、可验证SLAM
+- DROID-SLAM、自监督深度位姿学习、可微BA
+- 极端环境、类脑SLAM、因果SLAM、社会影响
 
 ---
 
